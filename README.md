@@ -12,7 +12,7 @@ Don't forget that you must also fill out an evaluation form in Moodle to conside
 ## Grading
 
 (STUDENT NUMBER HERE) (STUDENT NAME HERE) (STUDENT EMAIL HERE)
-(STUDENT NUMBER HERE) (STUDENT NAME HERE) (STUDENT EMAIL HERE)
+(802-25-5527) (Daniel F. Muñoz Valenzuela) (daniel.munoz13@upr.edu)
 
 Any project that doesn't compile will receive a 0.
 
