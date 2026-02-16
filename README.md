@@ -12,7 +12,7 @@ Don't forget that you must also fill out an evaluation form in Moodle to conside
 ## Grading
 
 (802-25-5370) (Héctor G. López Caro) (hector.lopez64@upr.edu)
-(802-25-2557) (Daniel F. Muñoz Valenzuela) (daniel.munoz13@upr.edu)
+(802-25-5227) (Daniel F. Muñoz Valenzuela) (daniel.munoz13@upr.edu)
 
 Any project that doesn't compile will receive a 0.
 
