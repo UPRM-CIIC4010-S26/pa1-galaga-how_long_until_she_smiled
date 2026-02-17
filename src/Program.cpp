@@ -65,7 +65,8 @@ void Program::Update() {
                 lives--;
             }
         }
-
+        
+        //Collision detection, checks if a bullet that isnt the player hits the player, and if, reset the player.
         for (Projectile& p : Projectile::projectiles) { 
             if (HitBox::Collision(player->hitBox,p.getHitBox()) && p.ID){
                 PlayerReset();
