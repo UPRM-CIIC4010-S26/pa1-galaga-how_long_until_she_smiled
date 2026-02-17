@@ -109,7 +109,7 @@ void Program::ManageEnemyRespawns() {
         respawnCooldown = 1080;
         for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
             if (!p.second && p.first.second != 150) {
-                int eType = GetRandomValue(1, 3);
+                int eType = GetRandomValue(1, 3); //eType = enemyType
 
                 if (eType == 1) {
                     p.second = new StEnemy(GetScreenWidth() / 2 - 15, 0, true);
