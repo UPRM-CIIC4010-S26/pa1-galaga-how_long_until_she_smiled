@@ -6,11 +6,11 @@
 
 class Player {
     private:
-        int cooldown = 30;
-        int speed = 3;
+        int cooldown = 30; //Countdown for firing (FRAMES)
+        int speed = 3; //Pixel per frame (speed = 3ppf)
     
     public:
-        std::pair<float, float> position;
+        std::pair<float, float> position; //Position coordinates
         HitBox hitBox;
 
         Player(float x, float y) {
