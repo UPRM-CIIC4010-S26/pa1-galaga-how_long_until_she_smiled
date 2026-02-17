@@ -1,5 +1,9 @@
 #include "SpEnemy.hpp"
 
+/*
+The SpEnemy is located at the top row, with two of the them being spawen at the start.
+*/
+
 
 void SpEnemy::draw() {
     if (HitBox::drawHitbox) this->hitBox.draw();

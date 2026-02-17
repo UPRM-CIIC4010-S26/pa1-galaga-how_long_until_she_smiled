@@ -1,22 +1,22 @@
 #include "Program.hpp"
 
-Program::Program() {
-    Background::sideWalls = std::pair<HitBox, HitBox>{ 
-        HitBox(0, 0, 10, GetScreenHeight()), 
-        HitBox(GetScreenWidth() - 10, 0, 10, GetScreenHeight())
-    };
+void Program::StartingPositionEnemies(){
+    /*
+    AddingEnemies() makes sure to add all the enemies to the vector, with the starting location.
+    */
+    //Sp Enemy adding (the two enemies at the top)------------------------
+    Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
+        std::pair<float, float>{350, 150}, 
+        new SpEnemy(350, 150)
+    });
 
     Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
-            std::pair<float, float>{350, 150}, 
-            new SpEnemy(350, 150)
-        });
+        std::pair<float, float>{600, 150}, 
+        new SpEnemy(600, 150)
+    });
+    //--------------------------------------------------------------------
 
-    Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
-            std::pair<float, float>{600, 150}, 
-            new SpEnemy(600, 150)
-        });
-        
-    //Aligns the enemies in the starting fase
+    //Rest of the enemies-----------------------------------------------------
     for (int i = 0; i < 30; i++) {
         float x = 250 + 50 * (i%10);
         float y = 200 + 50 * (i/10);
@@ -25,7 +25,17 @@ Program::Program() {
             std::pair<float, float>{x, y}, 
             new StdEnemy(x, y)
         });
-    }
+    //-------------------------------------------------------------------------
+}};
+
+Program::Program() {
+    Background::sideWalls = std::pair<HitBox, HitBox>{ 
+        HitBox(0, 0, 10, GetScreenHeight()), 
+        HitBox(GetScreenWidth() - 10, 0, 10, GetScreenHeight())
+    };
+
+    //Aligns the enemies in the starting fase
+    StartingPositionEnemies();
 }
 
 void Program::Update() {
@@ -57,6 +67,9 @@ void Program::Update() {
         }
 
         for (Projectile& p : Projectile::projectiles) { 
+            if (HitBox::Collision(player->hitBox,p.getHitBox()) && p.ID){
+                PlayerReset();
+            };
             p.update(); 
 
         }
@@ -183,6 +196,7 @@ void Program::Reset() {
     Enemy::enemies.clear();
     StdEnemy::attackInProgress = false;
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
+    StartingPositionEnemies(); //Restarting the enemies to the start position
     respawnCooldown = 1080;
     respawns = 0;
     count = 0;

@@ -26,7 +26,7 @@ class Program {
 
     public:
         Program();
-        
+        void StartingPositionEnemies();
         void Update();
         void Draw();
         void ManageEnemyRespawns();

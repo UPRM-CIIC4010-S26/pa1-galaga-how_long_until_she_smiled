@@ -1,6 +1,11 @@
 #pragma once
 #include "Enemy.hpp"
 
+//SP ENEMY
+/*
+The SpEnemy is located at the top row, with two of the them being spawen at the start.
+*/
+
 class SpEnemy : public Enemy {
     private: 
         float angle = 90;
