@@ -12,7 +12,8 @@ class DyEnemy : public Enemy {
             this->cooldown = GetRandomValue(90, 300);
             this->health = 1; 
         }
-
+        
+        int tType;
         void draw() override;
         void update(std::pair<float, float> pos, HitBox target) override;
         void attack(HitBox target) override;
