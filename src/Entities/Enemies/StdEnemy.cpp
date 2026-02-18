@@ -1,5 +1,14 @@
 #include "StdEnemy.hpp"
 
+/*
+StdEnemy: The red butterflies and yellow bees that shoot and dive at you
+
+Not worth many points.
+
+HP: 2
+Has player dive attack: yes (only dive)
+*/
+
 void StdEnemy::draw() {
     if (HitBox::drawHitbox) this->hitBox.draw();
     switch(this->type) {

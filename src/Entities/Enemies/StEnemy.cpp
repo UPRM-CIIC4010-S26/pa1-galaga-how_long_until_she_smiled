@@ -1,8 +1,20 @@
 #include "StEnemy.hpp"
 
+/*
+StEnemy: Occassionally (1 in 3 chance) shows up on a regular-enemy respawn.
+
+Shoots at a narrower random range (higher overall frequency) than StdEnemy, 
+at the cost of lacking a dive attack and having 1 HP.
+
+As it is rarer than StdEnemy, it is worth slightly more points.
+
+HP: 1
+Has player dive attack: no
+*/
+
 void StEnemy::draw() {
     if (HitBox::drawHitbox) this->hitBox.draw();
-    DrawTexturePro(ImageManager::SpriteSheet, Rectangle{2, 111, 13, 13}, 
+    DrawTexturePro(ImageManager::SpriteSheet, Rectangle{2, 111, 13, 13}, // Rectangle{2, 111, 13, 13}
                                 Rectangle{this->position.first, this->position.second, 30, 30}, 
                                 Vector2{0, 0}, 0, WHITE);
 }

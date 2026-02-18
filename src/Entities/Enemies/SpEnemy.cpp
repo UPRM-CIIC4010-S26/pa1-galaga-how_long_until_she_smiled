@@ -1,7 +1,15 @@
 #include "SpEnemy.hpp"
 
 /*
-The SpEnemy is located at the top row, with two of the them being spawen at the start.
+The SpEnemy is located at the top row, with two of the them being spawned at the start.
+
+In the original Galaga, this enemy would steal your ship, but for the sake of scope, this project alters
+the behavior so that it shoots three projectiles instead
+
+Worth the most points of the enemies that spawn initially.
+
+HP: 2
+Has player dive attack: yes (dive and shoot)
 */
 
 
