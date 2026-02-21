@@ -174,6 +174,9 @@ void Program::KeyInputs() {
     if (!paused && !startup && IsKeyPressed('O')) gameOver = !gameOver;
     if (!gameOver && !paused && IsKeyPressed('I')) startup = !startup;
     if (IsKeyPressed('H')) HitBox::drawHitbox = !HitBox::drawHitbox;
+
+    // Debug function below, comment out on release build
+    if (IsKeyPressed('K')) scoreManager.addToScore(500);
     
     if (gameOver && IsKeyPressed(KEY_ENTER)) {
         gameOver = false;

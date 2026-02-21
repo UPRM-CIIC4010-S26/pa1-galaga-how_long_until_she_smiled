@@ -9,12 +9,12 @@ void ScoreManager::draw(raylib::Vector2 position) {
     // BONUS: Draw high score?
 }
 
-void ScoreManager::addToScore(unsigned int increment) {
+void ScoreManager::addToScore(uint32_t increment) {
     int scoreUpdate = this->score + increment;
     if (scoreUpdate > this->maxScore) scoreUpdate = this->maxScore;
-    this->score += scoreUpdate;
+    this->score = scoreUpdate;
 }
-unsigned int ScoreManager::addToScore(unsigned int increment, unsigned int amountToNextLife) {
+uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife) {
     this->addToScore(increment);
 
     if (amountToNextLife == 0) return 0;
@@ -22,7 +22,7 @@ unsigned int ScoreManager::addToScore(unsigned int increment, unsigned int amoun
     int livesObtained = (this->score / amountToNextLife);
     return livesObtained;
 }
-unsigned int ScoreManager::addToScore(unsigned int increment, unsigned int amountToNextLife, unsigned int maxLives) {
+uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife, uint32_t maxLives) {
     int livesObtained = this->addToScore(increment, amountToNextLife);
 
     if (livesObtained > maxLives) livesObtained = maxLives;

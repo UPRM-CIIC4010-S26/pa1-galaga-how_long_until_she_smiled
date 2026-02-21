@@ -1,22 +1,23 @@
 #pragma once
 
+#include <cstdint>
 #include "raylib-cpp/raylib-cpp.hpp"
 #include "FontManager.hpp"
 
 class ScoreManager {
     private:
-        int score;
-        int maxScore = 9999;
+        uint32_t score;
+        uint32_t maxScore = 99990;
     public:
         // The single most important function in this class
         int getScore(void) { return this->score; }
 
         // Adds to score, checking maximum values in order to not overflow
-        void addToScore(unsigned int increment);
+        void addToScore(uint32_t increment);
         // Additionally, return the amount of extra lives the player would have given an amount to the next life
-        unsigned int addToScore(unsigned int increment, unsigned int amountToNextLife);
+        uint32_t addToScore(uint32_t increment, uint32_t amountToNextLife);
         // Additionally additionally, cap the amount of lives returned to maxLives
-        unsigned int addToScore(unsigned int increment, unsigned int amountToNextLife, unsigned int maxLives);
+        uint32_t addToScore(uint32_t increment, uint32_t amountToNextLife, unsigned int maxLives);
 
         void draw(raylib::Vector2 position);
 
