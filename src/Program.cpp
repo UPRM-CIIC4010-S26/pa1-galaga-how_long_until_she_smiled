@@ -82,7 +82,10 @@ void Program::Update() {
 }
 
 void Program::Draw() {
+    // Background
     background.Draw();
+
+    // Entities
     if (pauseFrames <= 0 && !gameOver) player->draw();
     for (Animation& a : Animation::animations) a.draw();
 
@@ -96,6 +99,10 @@ void Program::Draw() {
     for (Projectile p : Projectile::projectiles) p.draw();
     for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) if (p.second) p.second->draw();
 
+    // HUD
+    
+
+    // Overlays
     if (startup) DrawStartup();
     if (paused) DrawPauseScreen();
     if (gameOver) DrawGameOver();
