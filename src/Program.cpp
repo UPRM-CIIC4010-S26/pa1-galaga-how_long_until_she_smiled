@@ -175,7 +175,7 @@ void Program::KeyInputs() {
     if (!gameOver && !paused && IsKeyPressed('I')) startup = !startup;
     if (IsKeyPressed('H')) HitBox::drawHitbox = !HitBox::drawHitbox;
 
-    // Debug function below, comment out on release build
+    // Custom debug function below, potentially comment out on release build
     if (IsKeyPressed('K')) scoreManager.addToScore(500);
     
     if (gameOver && IsKeyPressed(KEY_ENTER)) {
@@ -196,6 +196,7 @@ void Program::PlayerReset() {
         Animation(player->position.first, player->position.second, 16, 0, 33, 34, 30 ,30, 3, ImageManager::SpriteSheet)
     );
 
+
     PlaySound(SoundManager::gameOver);
     Projectile::projectiles.clear();
     player->position.first = GetScreenWidth() / 2 - 15;
@@ -207,6 +208,7 @@ void Program::Reset() {
     Enemy::enemies.clear();
     StdEnemy::attackInProgress = false;
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
+    scoreManager.resetScore(); // Reset score
     StartingPositionEnemies(); //Restarting the enemies to the start position
     respawnCooldown = 1080;
     respawns = 0;
