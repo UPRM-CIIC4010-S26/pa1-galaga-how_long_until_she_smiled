@@ -1,5 +1,7 @@
 #pragma once
+
 #include "raylib-cpp/raylib-cpp.hpp"
+#include "FontManager.hpp"
 
 class ScoreManager {
     private:
@@ -16,7 +18,7 @@ class ScoreManager {
         // Additionally additionally, cap the amount of lives returned to maxLives
         unsigned int addToScore(unsigned int increment, unsigned int amountToNextLife, unsigned int maxLives);
 
-        void draw(Font providedFont, raylib::Vector2 position);
+        void draw(raylib::Vector2 position);
 
         ScoreManager(void) { this->score = 0; }
         ScoreManager(int startingValue) { this->score = startingValue; }

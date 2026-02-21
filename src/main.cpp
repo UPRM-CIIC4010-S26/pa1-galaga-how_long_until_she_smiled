@@ -11,6 +11,7 @@ int main ()
 
 	raylib::Window window(1000, 1000, "Galaga", FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	Program Galaga;
+	FontManager::Load();
 	ImageManager::Load();
 	SoundManager::Load();
 
@@ -30,6 +31,7 @@ int main ()
 		EndDrawing();
 	}
 
+	FontManager::Unload();
 	ImageManager::Unload();
 	SoundManager::Unload();
 	CloseAudioDevice();

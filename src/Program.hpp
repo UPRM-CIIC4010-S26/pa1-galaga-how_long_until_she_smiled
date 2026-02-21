@@ -11,7 +11,6 @@
 #include "StEnemy.hpp"
 #include "DyEnemy.hpp"
 
-#define RETRO_FONT "resources/fonts/PressStart2P-vaV7.ttf"
 class Program {
     private:
         Background background = Background();
@@ -28,8 +27,6 @@ class Program {
         bool paused = false;
         bool gameOver = false;
 
-        Font pixelFontHead = LoadFontEx(RETRO_FONT, 40, 0, 0);
-        Font pixelFontBody = LoadFontEx(RETRO_FONT, 30, 0, 0);
 
     public:
         Program();
