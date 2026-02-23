@@ -16,8 +16,6 @@ class ScoreManager {
         void addToScore(uint32_t increment);
         // Additionally, return the amount of extra lives the player would have given an amount to the next life
         uint32_t addToScore(uint32_t increment, uint32_t amountToNextLife);
-        // Additionally additionally, cap the amount of lives returned to maxLives
-        uint32_t addToScore(uint32_t increment, uint32_t amountToNextLife, unsigned int maxLives);
 
         void draw(raylib::Vector2 position);
 

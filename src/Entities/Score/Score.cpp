@@ -19,12 +19,9 @@ uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife)
 
     if (amountToNextLife == 0) return 0;
 
-    int livesObtained = (this->score / amountToNextLife);
-    return livesObtained;
-}
-uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife, uint32_t maxLives) {
-    int livesObtained = this->addToScore(increment, amountToNextLife);
+    // TODO: Fix, as currently, the function increases the lives obtained every 2000-interval
+    bool thousandRangeUpdate = ((this->score / amountToNextLife) > (this->score - increment) / amountToNextLife);
+    int livesObtained = ((thousandRangeUpdate) ? 1 : 0);
 
-    if (livesObtained > maxLives) livesObtained = maxLives;
     return livesObtained;
 }

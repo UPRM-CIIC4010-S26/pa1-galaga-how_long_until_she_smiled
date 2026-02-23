@@ -101,6 +101,7 @@ void Program::Draw() {
 
     // HUD
     scoreManager.draw({20, 20});
+    this->DrawCurrentLives();
 
     // Overlays
     if (startup) DrawStartup();
@@ -151,6 +152,12 @@ void Program::ManageEnemyRespawns() {
     }
 }
 
+// Who invited DrawCurrentLives to the overlay draw calls 😂😂😂 bro thinks he's on the team 💀💀
+void Program::DrawCurrentLives(void) {
+    int baseSize = FontManager::PixelFontBody.GetBaseSize();
+    FontManager::PixelFontBody.DrawText(TextFormat("%01i-UP", this->lives), {150, 20}, baseSize, 0.1, RED);
+}
+
 void Program::DrawStartup() {
     DrawRectangle(0, 0, (float)GetScreenWidth(), (float)GetScreenHeight(), Color{0, 0, 0, 125});
     DrawText("Galaga", (GetScreenWidth() / 2 - 237), 75, 144, WHITE);
@@ -176,7 +183,12 @@ void Program::KeyInputs() {
     if (IsKeyPressed('H')) HitBox::drawHitbox = !HitBox::drawHitbox;
 
     // Custom debug function below, potentially comment out on release build
-    if (IsKeyPressed('K')) scoreManager.addToScore(500);
+    if (IsKeyPressed('K')) {
+        this->lives += scoreManager.addToScore(500, 1000);
+        if (this->lives > 5) {
+            this->lives = 5;
+        }
+    }
     
     if (gameOver && IsKeyPressed(KEY_ENTER)) {
         gameOver = false;

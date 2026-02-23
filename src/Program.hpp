@@ -11,6 +11,9 @@
 #include "StEnemy.hpp"
 #include "DyEnemy.hpp"
 
+#define DEFAULT_LIVES 3
+#define MAX_LIVES 5
+
 class Program {
     private:
         Background background = Background();
@@ -20,7 +23,7 @@ class Program {
         int respawns = 0;
         int count = 0;
         int delay = 0;
-        int lives = 3;
+        int lives = DEFAULT_LIVES;
         int pauseFrames = 0;
 
         bool startup = true;
@@ -34,6 +37,7 @@ class Program {
         void Update();
         void Draw();
         void ManageEnemyRespawns();
+        void DrawCurrentLives(void); // NOT an overlay, part of the heads-up display
         void DrawStartup();
         void DrawPauseScreen();
         void DrawGameOver();

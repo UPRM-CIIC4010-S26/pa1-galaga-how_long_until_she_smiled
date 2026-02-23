@@ -6,6 +6,8 @@
 #include "Score.hpp"
 #include <iostream>
 
+#define MAX_PLAYER_LIVES 5
+
 class Enemy {
     protected:
         float angle = 90;
@@ -62,7 +64,6 @@ class Enemy {
                     for (Projectile& p2 : Projectile::projectiles) {
                         if (p2.ID != 1 && HitBox::Collision(p.second->hitBox, p2.getHitBox())) {
                             p.second->health--;
-                            lives += scoreManager.addToScore(p.second->getPoints(), 1000, 5);
                             p2.del = true;
                             PlaySound(SoundManager::hit);
                         }
@@ -72,6 +73,10 @@ class Enemy {
                         Animation::animations.push_back(
                             Animation(p.second->position.first, p.second->position.second, 155, 0, 33, 33, 30, 30, 4, ImageManager::SpriteSheet)
                         );
+                        lives += scoreManager.addToScore(p.second->getPoints(), 1000);
+                        if (lives > 5) {
+                            lives = 5;
+                        }
                         p.second = nullptr;
                         PlaySound(SoundManager::dead);
                     }
