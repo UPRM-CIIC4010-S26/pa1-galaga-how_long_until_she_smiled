@@ -1,5 +1,8 @@
 #include "Program.hpp"
 
+#define RATIONAL_OFFSET 50
+#define EXPONENTIAL_OFFSET 670
+
 void Program::StartingPositionEnemies(){
     /*
     AddingEnemies() makes sure to add all the enemies to the vector, with the starting location.
@@ -103,6 +106,9 @@ void Program::Draw() {
     scoreManager.draw({20, 20});
     this->DrawCurrentLives();
 
+    // Debug HUD
+    // this->DrawDebugVariables();
+
     // Overlays
     if (startup) DrawStartup();
     if (paused) DrawPauseScreen();
@@ -114,7 +120,8 @@ void Program::ManageEnemyRespawns() {
 
     respawnCooldown -= 1;
     if (respawnCooldown <= 0) {
-        if (scoreManager.getScore() != -1000) respawnCooldownReset = (DEFAULT_COOLDOWN * 1000) / (scoreManager.getScore() - 1000);
+        if (scoreManager.getScore() != -1000) respawnCooldownReset = (DEFAULT_COOLDOWN * RATIONAL_OFFSET)   \
+                                                    / (std::exp(scoreManager.getScore() / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET);
         respawnCooldown = respawnCooldownReset;
         for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
             if (!p.second && p.first.second != 150) {
@@ -157,6 +164,12 @@ void Program::ManageEnemyRespawns() {
 void Program::DrawCurrentLives(void) {
     int baseSize = FontManager::PixelFontBody.GetBaseSize();
     FontManager::PixelFontBody.DrawText(TextFormat("%01i-UP", this->lives), {150, 20}, baseSize, 0.1, RED);
+}
+void Program::DrawDebugVariables(void) {
+    int baseSize = FontManager::PixelFontBody.GetBaseSize();
+
+    FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown reset: %01i", this->respawnCooldownReset), {150, 400}, baseSize, 0.1, RED);
+    FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown: %01i", this->respawnCooldown), {150, 500}, baseSize, 0.1, RED);
 }
 
 void Program::DrawStartup() {

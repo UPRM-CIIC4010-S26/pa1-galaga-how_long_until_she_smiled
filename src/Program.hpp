@@ -41,6 +41,7 @@ class Program {
         void Draw();
         void ManageEnemyRespawns();
         void DrawCurrentLives(void); // NOT an overlay, part of the heads-up display
+        void DrawDebugVariables(void); // ^
         void DrawStartup();
         void DrawPauseScreen();
         void DrawGameOver();
