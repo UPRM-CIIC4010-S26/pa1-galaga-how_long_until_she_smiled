@@ -14,12 +14,15 @@
 #define DEFAULT_LIVES 3
 #define MAX_LIVES 5
 
+#define DEFAULT_COOLDOWN 1080
+
 class Program {
     private:
         Background background = Background();
         Player* player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
         ScoreManager scoreManager;
-        int respawnCooldown = 1080;
+        int respawnCooldownReset = DEFAULT_COOLDOWN;
+        int respawnCooldown = respawnCooldownReset;
         int respawns = 0;
         int count = 0;
         int delay = 0;

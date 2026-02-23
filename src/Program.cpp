@@ -114,7 +114,8 @@ void Program::ManageEnemyRespawns() {
 
     respawnCooldown -= 1;
     if (respawnCooldown <= 0) {
-        respawnCooldown = 1080;
+        if (scoreManager.getScore() != -1000) respawnCooldownReset = (DEFAULT_COOLDOWN * 1000) / (scoreManager.getScore() - 1000);
+        respawnCooldown = respawnCooldownReset;
         for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
             if (!p.second && p.first.second != 150) {
                 int eType = GetRandomValue(1, 3); //eType = enemyType
@@ -222,7 +223,7 @@ void Program::Reset() {
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
     scoreManager.resetScore(); // Reset score
     StartingPositionEnemies(); //Restarting the enemies to the start position
-    respawnCooldown = 1080;
+    respawnCooldown = respawnCooldownReset;
     respawns = 0;
     count = 0;
     delay = 0;
