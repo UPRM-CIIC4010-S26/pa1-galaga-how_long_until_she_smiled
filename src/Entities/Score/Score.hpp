@@ -9,6 +9,8 @@ class ScoreManager {
     private:
         uint32_t score;
         uint32_t maxScore = 99990;
+
+        uint32_t highScore = 0;
     public:
         // The single most important function in this class
         int getScore(void) { return this->score; }
@@ -23,6 +25,8 @@ class ScoreManager {
         ScoreManager(void) { this->score = 0; }
         ScoreManager(int startingValue) { this->score = startingValue; }
 
-        void resetScore(void) { this->score = 0; }
-        void resetScore(int startingValue) { this->score = startingValue; }
+        void setHighScore(void) { if (this->score > this->highScore) this->highScore = this->score; }
+
+        void resetScore(void) { this->setHighScore(); this->score = 0; }
+        void resetScore(int startingValue) { this->setHighScore(); this->score = startingValue; }
 };

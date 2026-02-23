@@ -8,7 +8,10 @@ void ScoreManager::draw(raylib::Vector2 position) {
     FontManager::PixelFontBody.DrawText("Score", position, baseSize, 0.1f, RED);
     FontManager::PixelFontBody.DrawText(TextFormat("%04i", this->score), position + raylib::Vector2(0, 20), baseSize, 0.1, WHITE);
 
-    // BONUS: Draw high score?
+    // BONUS: Draw high score
+    raylib::Vector2 hiScoreOffset = raylib::Vector2(250, 0);
+    FontManager::PixelFontBody.DrawText("Hi Score", position + hiScoreOffset, baseSize, 0.1f, RED);
+    FontManager::PixelFontBody.DrawText(TextFormat("%05i", this->highScore), position + hiScoreOffset + raylib::Vector2(0, 20), baseSize, 0.1, WHITE);
 }
 
 // ----- Adding to score -----
