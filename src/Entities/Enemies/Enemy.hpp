@@ -41,6 +41,7 @@ class Enemy {
         virtual void update(std::pair<float, float> pos, HitBox target) = 0;
         virtual void attack(HitBox target) = 0;
 
+        // Charge points are given when using the charge attack, and convoy points are given when not.
         unsigned int getPoints(void) { return (this->isCharge ? this->chargePoints : this->convoyPoints); }
 
         void frameChange() {

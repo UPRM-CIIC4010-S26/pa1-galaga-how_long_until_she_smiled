@@ -17,12 +17,18 @@ class SpEnemy : public Enemy {
         SpEnemy(float x, float y) : Enemy(x, y) { 
             this->cooldown = GetRandomValue(300, 1380); 
             this->health = 4;
+
+            this->convoyPoints = 150;
+            this->chargePoints = 300;
         }
 
         SpEnemy(float x, float y, bool newSpawn) : Enemy(x, y){
             this->cooldown = GetRandomValue(360, 1380);
             this->health = 4;
             this->spawning = newSpawn;
+
+            this->convoyPoints = 150;
+            this->chargePoints = 300;
         }
 
         void draw() override;

@@ -11,6 +11,8 @@ class DyEnemy : public Enemy {
         DyEnemy(float x, float y) : Enemy(x, y) { 
             this->cooldown = GetRandomValue(90, 300);
             this->health = 1; 
+
+            this->convoyPoints = 160;
         }
         
         int tType;
