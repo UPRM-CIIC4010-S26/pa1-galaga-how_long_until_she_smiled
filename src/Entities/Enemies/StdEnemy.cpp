@@ -4,9 +4,10 @@
 StdEnemy: The red butterflies and yellow bees that shoot and dive at you
 
 Not worth many points.
+Convoy points: 50, Charge points: 100
 
 HP: 2
-Has player dive attack: yes (only dive)
+Has charging attack: yes (only dive)
 */
 
 void StdEnemy::draw() {
@@ -84,11 +85,14 @@ void StdEnemy::update(std::pair<float, float> pos, HitBox target) {
             this->position.first = pos.first;
             this->position.second = pos.second;
             this->spawning = false;
+
+            this->isCharge = false;
         }
     } else {
         if (!attackInProgress) PlaySound(SoundManager::attack);
         attackInProgress = true;
         this->attack(target);
+        this->isCharge = true;
     }
     
     if (this->cooldown <= 0) {

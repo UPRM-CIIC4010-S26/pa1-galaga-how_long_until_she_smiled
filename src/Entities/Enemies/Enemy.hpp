@@ -3,6 +3,7 @@
 #include "Math.hpp"
 #include "ImageManager.hpp"
 #include "Animation.hpp"
+#include "Score.hpp"
 #include <iostream>
 
 class Enemy {
@@ -13,6 +14,11 @@ class Enemy {
         bool spawning = false;
         bool frame = false;
         int frameCooldown = 30;
+
+        bool isCharge = false;
+
+        unsigned int convoyPoints = 10;
+        unsigned int chargePoints = 20;
         
     public:
         int health = 1;
@@ -35,6 +41,8 @@ class Enemy {
         virtual void update(std::pair<float, float> pos, HitBox target) = 0;
         virtual void attack(HitBox target) = 0;
 
+        unsigned int getPoints(void) { return (this->isCharge ? this->chargePoints : this->convoyPoints); }
+
         void frameChange() {
             frameCooldown--;
 
@@ -44,7 +52,7 @@ class Enemy {
              }
         }
 
-        static void ManageEnemies(HitBox target) {
+        static void ManageEnemies(HitBox target, ScoreManager &scoreManager, int &lives) {
             for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
                 p.first.first += (p.first.first == 0) ? 0 : direction;
                 if (p.second) {
@@ -53,6 +61,7 @@ class Enemy {
                     for (Projectile& p2 : Projectile::projectiles) {
                         if (p2.ID != 1 && HitBox::Collision(p.second->hitBox, p2.getHitBox())) {
                             p.second->health--;
+                            lives += scoreManager.addToScore(p.second->getPoints(), 1000, 5);
                             p2.del = true;
                             PlaySound(SoundManager::hit);
                         }

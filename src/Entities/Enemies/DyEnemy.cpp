@@ -4,9 +4,10 @@
 DyEnemy: Spawning rocket enemy ships that occassionally fly through the stage. 
 
 Worth extra points, as they are harder to shoot.
+Convoy points: 160
 
 HP: 1
-Has player dive attack: no (its whole appearance is an attack)
+Has charging attack: no (its whole appearance is an attack)
 */
 
 

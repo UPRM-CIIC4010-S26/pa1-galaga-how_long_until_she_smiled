@@ -3,13 +3,14 @@
 /*
 The SpEnemy is located at the top row, with two of the them being spawned at the start.
 
-In the original Galaga, this enemy would steal your ship, but for the sake of scope, this project alters
-the behavior so that it shoots three projectiles instead
+In the original Galaga, this enemy would swoop down to the middle of the screen to capture
+your ship. Due to scope limitations, this ability has been nerfed to firing three shots at 
+different angles.
 
-Worth the most points of the enemies that spawn initially.
+Convoy points: 150, Charge points: 300
 
 HP: 2
-Has player dive attack: yes (dive and shoot)
+Has charging attack: yes
 */
 
 
@@ -62,9 +63,12 @@ void SpEnemy::update(std::pair<float, float> pos, HitBox target) {
             this->position.first = pos.first;
             this->position.second = pos.second;
             this->spawning = false;
+
+            this->isCharge = false;
         }
     } else {
         this->attack(target);
+        this->isCharge = true;
     }
     
     if (this->cooldown <= 0) {

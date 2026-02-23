@@ -7,9 +7,10 @@ Shoots at a narrower random range (higher overall frequency) than StdEnemy,
 at the cost of lacking a dive attack and having 1 HP.
 
 As it is rarer than StdEnemy, it is worth slightly more points.
+Convoy points: 150
 
 HP: 1
-Has player dive attack: no
+Has charging attack: no
 */
 
 void StEnemy::draw() {
