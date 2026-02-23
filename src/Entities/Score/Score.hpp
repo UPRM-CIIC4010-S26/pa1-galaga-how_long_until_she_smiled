@@ -4,6 +4,7 @@
 #include "raylib-cpp/raylib-cpp.hpp"
 #include "FontManager.hpp"
 
+// Manage scoring actions performed by the scoring system relating to itself
 class ScoreManager {
     private:
         uint32_t score;

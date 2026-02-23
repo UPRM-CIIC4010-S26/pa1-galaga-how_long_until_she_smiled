@@ -1,5 +1,7 @@
 #include "Score.hpp"
 
+// ----- Game loop functions -----
+// Drawing method for the score manager, to be called in main game loop
 void ScoreManager::draw(raylib::Vector2 position) {
     // Draw current score
     int baseSize = FontManager::PixelFontBody.GetBaseSize();
@@ -9,6 +11,7 @@ void ScoreManager::draw(raylib::Vector2 position) {
     // BONUS: Draw high score?
 }
 
+// ----- Adding to score -----
 void ScoreManager::addToScore(uint32_t increment) {
     int scoreUpdate = this->score + increment;
     if (scoreUpdate > this->maxScore) scoreUpdate = this->maxScore;
@@ -19,7 +22,7 @@ uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife)
 
     if (amountToNextLife == 0) return 0;
 
-    // TODO: Fix, as currently, the function increases the lives obtained every 2000-interval
+    // Check if the amountToNextLife-th digit of the score is greater than what is was before
     bool thousandRangeUpdate = ((this->score / amountToNextLife) > (this->score - increment) / amountToNextLife);
     int livesObtained = ((thousandRangeUpdate) ? 1 : 0);
 
