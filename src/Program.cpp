@@ -211,6 +211,11 @@ void Program::KeyInputs() {
 
     if (startup && IsKeyPressed(KEY_ENTER)) {
         startup = false;
+        if (!inGame) {
+            pauseFrames = 480;
+            PlaySound(SoundManager::theme);
+            inGame = true; 
+        }
     }
 
     if (!startup && !paused && !gameOver && pauseFrames <= 0) player->keyInputs();
@@ -241,4 +246,7 @@ void Program::Reset() {
     count = 0;
     delay = 0;
     lives = 3;
+    pauseFrames = 480;
+    PlaySound(SoundManager::theme );
+    inGame = true;
 }

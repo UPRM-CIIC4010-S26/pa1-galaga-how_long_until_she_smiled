@@ -32,7 +32,7 @@ class Program {
         bool startup = true;
         bool paused = false;
         bool gameOver = false;
-
+        bool inGame = false;
 
     public:
         Program();
