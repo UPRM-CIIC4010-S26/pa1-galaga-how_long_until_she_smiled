@@ -1,7 +1,8 @@
 #include "Program.hpp"
 
 #define RATIONAL_OFFSET 50
-#define EXPONENTIAL_OFFSET 670
+#define EXPONENTIAL_OFFSET 1200
+#define MIN_VALUE 300
 
 void Program::StartingPositionEnemies(){
     /*
@@ -120,8 +121,9 @@ void Program::ManageEnemyRespawns() {
 
     respawnCooldown -= 1;
     if (respawnCooldown <= 0) {
-        if (scoreManager.getScore() != -1000) respawnCooldownReset = (DEFAULT_COOLDOWN * RATIONAL_OFFSET)   \
-                                                    / (std::exp(scoreManager.getScore() / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET);
+        if (scoreManager.getScore() != -1000) respawnCooldownReset = ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
+                                                     / (std::exp(scoreManager.getScore() / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
+                                                                                                                    + MIN_VALUE;
         respawnCooldown = respawnCooldownReset;
         for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
             if (!p.second && p.first.second != 150) {
