@@ -1,8 +1,8 @@
 #include "Program.hpp"
 
-#define RATIONAL_OFFSET 50
-#define EXPONENTIAL_OFFSET 1200
-#define MIN_VALUE 300
+#define RATIONAL_OFFSET 25
+#define EXPONENTIAL_OFFSET 1000
+#define MIN_VALUE 500
 
 void Program::StartingPositionEnemies(){
     /*
