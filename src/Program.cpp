@@ -33,6 +33,7 @@ void Program::StartingPositionEnemies(){
 }};
 
 Program::Program() {
+    InitializeGrid();
     Background::sideWalls = std::pair<HitBox, HitBox>{ 
         HitBox(0, 0, 10, GetScreenHeight()), 
         HitBox(GetScreenWidth() - 10, 0, 10, GetScreenHeight())
@@ -43,6 +44,20 @@ Program::Program() {
 }
 
 void Program::Update() {
+    if (isBooting) {
+        bootTimer += GetFrameTime();
+
+        if (bootTimer >= 10.0f) {
+            isBooting = false;
+            startup = true;
+        }
+
+        return;
+    }
+
+    pauseFrames = std::max(pauseFrames - 1, 0);
+
+
     for (Animation& a : Animation::animations) a.update();
     for (int i = 0; i < Animation::animations.size(); i++) {
         if (Animation::animations[i].done) Animation::animations.erase(Animation::animations.begin() + i);
@@ -50,6 +65,7 @@ void Program::Update() {
     pauseFrames = std::max(pauseFrames - 1, 0);
 
     if (!startup && !paused && !gameOver && pauseFrames <= 0) {
+        
         Enemy::ManageEnemies(player->hitBox, scoreManager, lives);
         StdEnemy::attackReset();
         ManageEnemyRespawns();
@@ -86,6 +102,12 @@ void Program::Update() {
 }
 
 void Program::Draw() {
+    if (isBooting){
+        UpdateGrid();
+        DrawBootup();
+        return;
+    }
+
     // Background
     background.Draw();
 
@@ -172,6 +194,82 @@ void Program::DrawDebugVariables(void) {
 
     FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown reset: %01i", this->respawnCooldownReset), {150, 400}, baseSize, 0.1, RED);
     FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown: %01i", this->respawnCooldown), {150, 500}, baseSize, 0.1, RED);
+}
+
+void Program::InitializeGrid() {
+        bootGrid.resize(20); //Creates 20 lists empty in the outside list ( called x)
+        for (int y = 0; y < 20; y++){
+            bootGrid[y].resize(40); //Creates 40 empty list inside each of those 20 lists ( called y)
+            for (int x = 0; x < 40; x++) {
+                bool chanceOfLetter = GetRandomValue(0, 100) < 30; // If the random value is less than 30, it will be a letter, else is a block of color
+                bootGrid[y][x].isLetter = chanceOfLetter; //the var in the struc cell will be now that bool that we created thtat said if its a letter
+                if (chanceOfLetter) bootGrid[y][x].letter = 'A' + GetRandomValue(0,25); //if we got letter, then we have to asigned a random letter
+                            bootGrid[y][x].color = {(unsigned char)GetRandomValue(50,255), // for everything random colors
+                                                    (unsigned char)GetRandomValue(50,255),
+                                                    (unsigned char)GetRandomValue(50,255),
+                                                    255 };
+            };
+        };
+    }
+
+
+void Program::UpdateGrid(){ 
+        for (int y = 19; y > 0; y--) { //So basically what this does is put everything down a row, so we can a CRT Effect
+            bootGrid[y] = bootGrid[y-1]; 
+        }
+
+        for (int x = 0; x < 40; x++) { //Generates the first row
+        //Basically repeats the same code that we did when Initializing the Grid
+        bool letter = GetRandomValue(0, 100) < 30; 
+        bootGrid[0][x].isLetter = letter;
+        if (letter) bootGrid[0][x].letter = 'A' + GetRandomValue(0,25);
+        bootGrid[0][x].color = { (unsigned char)GetRandomValue(50,255),
+                                 (unsigned char)GetRandomValue(50,255),
+                                 (unsigned char)GetRandomValue(50,255),
+                                 255 };
+    }
+    }
+
+void Program::DrawBootup() {
+    //Debuging
+    DrawText(TextFormat("BOOT TIMER: %.2f", bootTimer), 10, 10, 20, RAYWHITE);
+
+    int centerX = GetScreenWidth() / 2 - 80;
+    int centerY = GetScreenHeight() / 2;
+
+    //if we are between the 0 and 5 in the boot timer, then start the "cleaning the memory" (check galaga arcade bootup)
+    if (bootTimer > 0.0f && bootTimer < 5.0f) {
+        int cellWidth  = GetScreenWidth() / 40; 
+        int cellHeight = GetScreenHeight() / 20;
+
+        for (int y = 0; y < 20; y++) {
+            for (int x = 0; x < 40; x++) {
+                Cell &c = bootGrid[y][x]; //instead of copying the cell, we are just rawdogging and taking the actual values for letters (technically more efficient) 
+
+                float px = x * cellWidth;
+                float py = y * cellHeight;
+
+                if (c.isLetter) {
+                    DrawText(&c.letter, px, py, cellHeight, c.color); 
+                } else {
+                    DrawRectangle(px, py, cellWidth, cellHeight, c.color); 
+                }
+                }
+            }
+        }
+
+    if (bootTimer > 5.0f && bootTimer < 10.0f) {
+        DrawText("MEMORY CLEANED", centerX, centerY - 60, 20, GREEN);
+
+        if(bootTimer > 7.5){
+        DrawText("RAM OK", centerX, centerY - 20, 20, GREEN);
+        }
+    
+        if (bootTimer > 8.5f) {
+            DrawText("ROM OK", centerX, centerY + 20, 20, GREEN);
+        }
+    }
+    
 }
 
 void Program::DrawStartup() {

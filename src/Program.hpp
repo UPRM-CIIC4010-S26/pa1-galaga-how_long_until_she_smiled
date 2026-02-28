@@ -28,11 +28,25 @@ class Program {
         int delay = 0;
         int lives = DEFAULT_LIVES;
         int pauseFrames = 0;
+        float bootTimer = 0.0f;
+        int bootFrameCounter = 0;
 
-        bool startup = true;
+        bool startup = false;
         bool paused = false;
         bool gameOver = false;
         bool inGame = false;
+        bool isBooting = true;
+
+        //BOOTUP VARIABLES
+        struct Cell { // Creating structures for each cell for the 2D List each list
+            bool isLetter;   
+            char letter;     
+            Color color;    
+        };
+        std::vector<std::vector<Cell>> bootGrid;/*There is no other way to do a CRT Effect without a 2D List having all the values of the letter
+                                                and having basically roating. And if there are, is too dificult to implement without changing a 
+                                                SIGNIFICANT part of the code base*/
+
 
     public:
         Program();
@@ -48,6 +62,11 @@ class Program {
         void KeyInputs();
         void PlayerReset();
         void Reset();
+
+        //BOOTUP FUNCTIONS
+        void DrawBootup();
+        void InitializeGrid(); //Intializes the grid of colors of RANDOM colors or letters
+        void UpdateGrid(); // Shift downs to look like rolling shutter
           
         ~Program() {}
 };
