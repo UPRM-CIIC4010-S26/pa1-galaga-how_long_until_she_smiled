@@ -45,6 +45,9 @@ uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife)
 
     return livesObtained;
 }
+
+// ----- Wave transition -----
+// Currently works like a linear sequence
 void ScoreManager::nextWave(void) {
     this->wave++;
     this->toNextWave += this->waveRate;

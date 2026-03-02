@@ -1,8 +1,10 @@
 #include "Program.hpp"
 
+/* DEPRECATED OFFSETS
 #define RATIONAL_OFFSET 25
 #define EXPONENTIAL_OFFSET 1000
 #define MIN_VALUE 500
+*/
 
 void Program::StartingPositionEnemies(){
     /*
@@ -116,6 +118,7 @@ void Program::Draw() {
     if (gameOver) DrawGameOver();
 }
 
+// Respawn 20 enemies all at once
 void Program::NewWave(void) {
     this->respawnCooldownReset = DEFAULT_COOLDOWN;
     this->respawnCooldown = this->respawnCooldownReset;
@@ -125,6 +128,7 @@ void Program::NewWave(void) {
     }
 }
 
+// Respawn enemy in position
 void Program::RespawnEnemy(void) {
     for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
         if (!p.second && p.first.second != 150) {

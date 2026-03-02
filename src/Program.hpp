@@ -29,7 +29,7 @@ class Program {
         int lives = DEFAULT_LIVES;
         int pauseFrames = 0;
 
-        int progWave = 1;
+        int progWave = 1; // The wave number that enemies follow
 
         bool startup = true;
         bool paused = false;
@@ -41,8 +41,8 @@ class Program {
         void StartingPositionEnemies();
         void Update();
         void Draw();
-        void NewWave(void);
-        void RespawnEnemy(void);
+        void NewWave(void); // Respawn enemies for each wave cleared
+        void RespawnEnemy(void); // Now the standalone function for respawning a single enemy
         void ManageEnemyRespawns();
         void DrawCurrentLives(void); // NOT an overlay, part of the heads-up display
         void DrawDebugVariables(void); // ^
