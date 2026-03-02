@@ -29,6 +29,8 @@ class Program {
         int lives = DEFAULT_LIVES;
         int pauseFrames = 0;
 
+        int progWave = 1;
+
         bool startup = true;
         bool paused = false;
         bool gameOver = false;
@@ -39,6 +41,8 @@ class Program {
         void StartingPositionEnemies();
         void Update();
         void Draw();
+        void NewWave(void);
+        void RespawnEnemy(void);
         void ManageEnemyRespawns();
         void DrawCurrentLives(void); // NOT an overlay, part of the heads-up display
         void DrawDebugVariables(void); // ^
