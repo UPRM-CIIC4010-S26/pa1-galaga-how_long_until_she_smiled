@@ -1,8 +1,10 @@
 #include "Program.hpp"
 
-#define RATIONAL_OFFSET 50
-#define EXPONENTIAL_OFFSET 1200
-#define MIN_VALUE 300
+/* DEPRECATED OFFSETS
+#define RATIONAL_OFFSET 25
+#define EXPONENTIAL_OFFSET 1000
+#define MIN_VALUE 500
+*/
 
 void Program::StartingPositionEnemies(){
     /*
@@ -126,11 +128,11 @@ void Program::Draw() {
     for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) if (p.second) p.second->draw();
 
     // HUD
-    scoreManager.draw({20, 20});
+    scoreManager.draw({20, 20}, progWave);
     this->DrawCurrentLives();
 
     // Debug HUD
-    // this->DrawDebugVariables();
+    this->DrawDebugVariables();
 
     // Overlays
     if (startup) DrawStartup();
@@ -138,33 +140,57 @@ void Program::Draw() {
     if (gameOver) DrawGameOver();
 }
 
+// Respawn 20 enemies all at once
+void Program::NewWave(void) {
+    this->respawnCooldownReset = DEFAULT_COOLDOWN;
+    this->respawnCooldown = this->respawnCooldownReset;
+
+    for (int i = 0; i < 20; i++) {
+        RespawnEnemy();
+    }
+}
+
+// Respawn enemy in position
+void Program::RespawnEnemy(void) {
+    for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
+        if (!p.second && p.first.second != 150) {
+            int eType = GetRandomValue(1, 3); //eType = enemyType
+
+            if (eType == 1) {
+                p.second = new StEnemy(GetScreenWidth() / 2 - 15, 0, true);
+                respawnCooldown /= 2;
+            } else {
+                p.second = new StdEnemy(GetScreenWidth() / 2 - 15, 0, true);
+            }
+
+            respawns++;
+            break;
+        } else if (!p.second && p.first.second == 150) {
+            p.second = new SpEnemy(GetScreenWidth() / 2 - 15, 0, true);
+            respawns++;
+            break;
+        }
+    }
+}
+
 void Program::ManageEnemyRespawns() {
     delay = std::max(delay - 1, 0);
 
     respawnCooldown -= 1;
     if (respawnCooldown <= 0) {
-        if (scoreManager.getScore() != -1000) respawnCooldownReset = ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
-                                                     / (std::exp(scoreManager.getScore() / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
-                                                                                                                    + MIN_VALUE;
-        respawnCooldown = respawnCooldownReset;
-        for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) {
-            if (!p.second && p.first.second != 150) {
-                int eType = GetRandomValue(1, 3); //eType = enemyType
-
-                if (eType == 1) {
-                    p.second = new StEnemy(GetScreenWidth() / 2 - 15, 0, true);
-                    respawnCooldown /= 2;
-                } else {
-                    p.second = new StdEnemy(GetScreenWidth() / 2 - 15, 0, true);
-                }
-
-                respawns++;
-                break;
-            } else if (!p.second && p.first.second == 150) {
-                p.second = new SpEnemy(GetScreenWidth() / 2 - 15, 0, true);
-                respawns++;
-                break;
+        if (progWave < scoreManager.getWave()) {
+            for (int i = 0; i < scoreManager.getWave() - progWave; i++) {
+                NewWave();
+                progWave++;
             }
+        } else {
+            int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getWave() - 1));
+            respawnCooldownReset = DEFAULT_COOLDOWN * std::exp(-std::pow(offsetScore, 2) / 3000000);
+                                            /* Original equation: ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
+                                                        / (std::exp(scoreDistance / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
+                                                                                                                        + MIN_VALUE;*/
+            respawnCooldown = respawnCooldownReset;
+            RespawnEnemy();
         }
     }
 
