@@ -17,6 +17,14 @@ void ScoreManager::draw(raylib::Vector2 position) {
     raylib::Vector2 waveOffset = raylib::Vector2(GetScreenWidth() * 3/4, 0);
     FontManager::PixelFontBody.DrawText(TextFormat("Wave %02i", this->wave), position + waveOffset, baseSize, 0.1f, RED);
 }
+void ScoreManager::draw(raylib::Vector2 position, int asyncWave) {
+    this->draw(position);
+
+    int baseSize = FontManager::PixelFontBody.GetBaseSize();
+
+    raylib::Vector2 waveOffset = raylib::Vector2(GetScreenWidth() * 5/8, 0);
+    FontManager::PixelFontBody.DrawText((asyncWave != this->wave ? "Incoming Wave!" : ""), position + waveOffset + raylib::Vector2(0, 20), baseSize, 0.1f, RED);
+}
 
 // ----- Adding to score -----
 void ScoreManager::addToScore(uint32_t increment) {

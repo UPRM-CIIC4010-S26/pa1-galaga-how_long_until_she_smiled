@@ -104,7 +104,7 @@ void Program::Draw() {
     for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) if (p.second) p.second->draw();
 
     // HUD
-    scoreManager.draw({20, 20});
+    scoreManager.draw({20, 20}, progWave);
     this->DrawCurrentLives();
 
     // Debug HUD

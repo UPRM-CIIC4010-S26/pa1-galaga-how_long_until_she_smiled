@@ -30,6 +30,7 @@ class ScoreManager {
         void nextWave(void);
 
         void draw(raylib::Vector2 position);
+        void draw(raylib::Vector2 position, int asyncWave);
 
         ScoreManager(void) { this->score = 0; }
         ScoreManager(int startingValue) { this->score = startingValue; }
