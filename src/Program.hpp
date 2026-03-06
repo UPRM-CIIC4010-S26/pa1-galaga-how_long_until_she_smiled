@@ -6,10 +6,17 @@
 #include "Background.hpp"
 #include "Player.hpp"
 #include "Score.hpp"
+#include "Loop.hpp"
 #include "StdEnemy.hpp"
 #include "SpEnemy.hpp"
 #include "StEnemy.hpp"
 #include "DyEnemy.hpp"
+
+#ifdef DEBUG
+constexpr bool DEBUG_MODE = true;
+#else
+constexpr bool DEBUG_MODE = false;
+#endif
 
 #define DEFAULT_LIVES 3
 #define MAX_LIVES 5
@@ -20,6 +27,7 @@ class Program {
     private:
         Background background = Background();
         Player* player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
+        Loop stageManager;
         ScoreManager scoreManager;
         int respawnCooldownReset = DEFAULT_COOLDOWN;
         int respawnCooldown = respawnCooldownReset;
@@ -39,6 +47,7 @@ class Program {
         bool gameOver = false;
         bool inGame = false;
         bool isBooting = true;
+        bool endless = false;
 
         //BOOTUP VARIABLES
         struct Cell { // Creating structures for each cell for the 2D List each list
@@ -53,7 +62,6 @@ class Program {
 
     public:
         Program();
-        void StartingPositionEnemies();
         void Update();
         void Draw();
         void NewWave(void); // Respawn enemies for each wave cleared

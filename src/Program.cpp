@@ -6,34 +6,6 @@
 #define MIN_VALUE 500
 */
 
-void Program::StartingPositionEnemies(){
-    /*
-    AddingEnemies() makes sure to add all the enemies to the vector, with the starting location.
-    */
-    //Sp Enemy adding (the two enemies at the top)------------------------
-    Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
-        std::pair<float, float>{350, 150}, 
-        new SpEnemy(350, 150)
-    });
-
-    Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
-        std::pair<float, float>{600, 150}, 
-        new SpEnemy(600, 150)
-    });
-    //--------------------------------------------------------------------
-
-    //Rest of the enemies-----------------------------------------------------
-    for (int i = 0; i < 30; i++) {
-        float x = 250 + 50 * (i%10);
-        float y = 200 + 50 * (i/10);
-
-        Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
-            std::pair<float, float>{x, y}, 
-            new StdEnemy(x, y)
-        });
-    //-------------------------------------------------------------------------
-}};
-
 Program::Program() {
     InitializeGrid();
     Background::sideWalls = std::pair<HitBox, HitBox>{ 
@@ -42,7 +14,7 @@ Program::Program() {
     };
 
     //Aligns the enemies in the starting fase
-    StartingPositionEnemies();
+    stageManager.StartingPositionEnemies();
 }
 
 void Program::Update() {
@@ -53,7 +25,6 @@ void Program::Update() {
             isBooting = false;
             startup = true;
         }
-
         return;
     }
 
@@ -129,7 +100,7 @@ void Program::Draw() {
     this->DrawCurrentLives();
 
     // Debug HUD
-    this->DrawDebugVariables();
+    if (DEBUG_MODE) this->DrawDebugVariables();
 
     // Overlays
     if (startup) DrawStartup();
@@ -177,17 +148,21 @@ void Program::ManageEnemyRespawns() {
     if (respawnCooldown <= 0) {
         if (progWave < scoreManager.getWave()) {
             for (int i = 0; i < scoreManager.getWave() - progWave; i++) {
+                if (endless && progWave < 3){
                 NewWave();
                 progWave++;
+                }
             }
         } else {
-            int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getWave() - 1));
-            respawnCooldownReset = DEFAULT_COOLDOWN * std::exp(-std::pow(offsetScore, 2) / 3000000);
-                                            /* Original equation: ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
-                                                        / (std::exp(scoreDistance / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
-                                                                                                                        + MIN_VALUE;*/
-            respawnCooldown = respawnCooldownReset;
-            RespawnEnemy();
+            if (!endless || progWave < 3){
+                int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getWave() - 1));
+                respawnCooldownReset = DEFAULT_COOLDOWN * std::exp(-std::pow(offsetScore, 2) / 3000000);
+                                                /* Original equation: ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
+                                                            / (std::exp(scoreDistance / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
+                                                                                                                            + MIN_VALUE;*/
+                respawnCooldown = respawnCooldownReset;
+                RespawnEnemy();
+            }
         }
     }
 
@@ -220,9 +195,9 @@ void Program::DrawDebugVariables(void) {
 }
 
 void Program::InitializeGrid() {
-        bootGrid.resize(20); //Creates 20 lists empty in the outside list ( called x)
+        bootGrid.resize(20); //Creates 20 lists empty in the outside list ( called y)
         for (int y = 0; y < 20; y++){
-            bootGrid[y].resize(40); //Creates 40 empty list inside each of those 20 lists ( called y)
+            bootGrid[y].resize(40); //Creates 40 empty list inside each of those 20 lists ( called x)
             for (int x = 0; x < 40; x++) {
                 bool chanceOfLetter = GetRandomValue(0, 100) < 30; // If the random value is less than 30, it will be a letter, else is a block of color
                 bootGrid[y][x].isLetter = chanceOfLetter; //the var in the struc cell will be now that bool that we created thtat said if its a letter
@@ -255,7 +230,7 @@ void Program::UpdateGrid(){
 
 void Program::DrawBootup() {
     //Debuging
-    DrawText(TextFormat("BOOT TIMER: %.2f", bootTimer), 10, 10, 20, RAYWHITE);
+    if(DEBUG_MODE)DrawText(TextFormat("BOOT TIMER: %.2f", bootTimer), 10, 10, 20, RAYWHITE);
 
     int centerX = GetScreenWidth() / 2 - 80;
     int centerY = GetScreenHeight() / 2;
@@ -299,6 +274,17 @@ void Program::DrawStartup() {
     DrawRectangle(0, 0, (float)GetScreenWidth(), (float)GetScreenHeight(), Color{0, 0, 0, 125});
     DrawText("Galaga", (GetScreenWidth() / 2 - 237), 75, 144, WHITE);
     DrawText("Press Enter", (GetScreenWidth() / 2) - 75, GetScreenHeight() / 2, 24, GRAY);
+
+    float t = GetTime();
+    bool flash = ((int)(t * 2) % 2) == 0; 
+    Color textColor = flash ? YELLOW : GRAY;
+    if (!endless){
+        DrawText("Endless", (GetScreenWidth() / 2) - 75, (GetScreenHeight() / 2)+40, 24, textColor);
+        DrawText("Stages", (GetScreenWidth() / 2) - 75, (GetScreenHeight() / 2)+80, 24, GRAY);
+    }else{
+        DrawText("Endless", (GetScreenWidth() / 2) - 75, (GetScreenHeight() / 2)+40, 24, GRAY);
+        DrawText("Stages", (GetScreenWidth() / 2) - 75, (GetScreenHeight() / 2)+80, 24, textColor);
+    }
 }
 
 void Program::DrawPauseScreen() {
@@ -332,9 +318,12 @@ void Program::KeyInputs() {
         Reset();
     }
 
+    if (startup && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN))) endless = !endless;
+
     if (startup && IsKeyPressed(KEY_ENTER)) {
         startup = false;
         if (!inGame) {
+            stageManager.SetMode(endless);
             pauseFrames = 480;
             PlaySound(SoundManager::theme);
             inGame = true; 
@@ -363,7 +352,7 @@ void Program::Reset() {
     StdEnemy::attackInProgress = false;
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
     scoreManager.resetScore(); // Reset score
-    StartingPositionEnemies(); //Restarting the enemies to the start position
+    stageManager.reset(); //Restarting the enemies to the start position
     respawnCooldown = respawnCooldownReset;
     respawns = 0;
     count = 0;
