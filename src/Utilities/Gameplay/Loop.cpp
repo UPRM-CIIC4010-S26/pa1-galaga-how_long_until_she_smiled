@@ -29,6 +29,15 @@ void Loop::StartingPositionEnemies(){
     stageRN = stages::DEFAULT;
 }};
 
+void Loop::KillEmAll(void) {
+    // not sure if I should keep this method around, because whoever creates the 
+    // enemies should destroy them
+    // and there already exists a perfectly good clear() function for vectors
+    //
+    // but the method name is so fucking cool....
+    // https://github.com/Svxy/The-Simpsons-Hit-and-Run/blob/0cf35df0a921a803a69d0da4c2aca02aa2543f03/game/code/worldsim/vehiclecentral.cpp#L1257
+}
+
 void Loop::reset(){
     switch (stageRN){
         case stages::DEFAULT:

@@ -18,5 +18,6 @@ class Loop{
     public:
     void SetMode(bool endless){this->isEndless = endless;}
     void StartingPositionEnemies();
+    void KillEmAll(void);
     void reset();
 };
