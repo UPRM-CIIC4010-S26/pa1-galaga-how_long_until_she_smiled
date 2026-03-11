@@ -68,6 +68,13 @@ void Program::Update() {
         if (lives <= 0 && pauseFrames <= 0) gameOver = true;
         Projectile::CleanProjectiles();
         Projectile::ProjectileCollision();
+
+
+        if (endless && progWave >= 3 && Enemy::aliveEnemies == 0 && !stageTransition) {
+            stageTransition = true;
+            progWave = 1;
+            Reset(true);
+        }
     }
 }
 
@@ -116,6 +123,7 @@ void Program::NewWave(void) {
     for (int i = 0; i < 20; i++) {
         RespawnEnemy();
     }
+    stageTransition = false;
 }
 
 // Respawn enemy in position
@@ -131,11 +139,13 @@ void Program::RespawnEnemy(void) {
                 p.second = new StdEnemy(GetScreenWidth() / 2 - 15, 0, true);
             }
 
+            Enemy::aliveEnemies++;
             respawns++;
             break;
         } else if (!p.second && p.first.second == 150) {
             p.second = new SpEnemy(GetScreenWidth() / 2 - 15, 0, true);
             respawns++;
+            Enemy::aliveEnemies++;
             break;
         }
     }
@@ -176,7 +186,7 @@ void Program::ManageEnemyRespawns() {
             std::pair<float, float>{0, 0}, 
             new DyEnemy(GetScreenWidth(), 300)
         });
-
+        Enemy::aliveEnemies++; 
         count--;
         delay = 20;
     }
@@ -189,7 +199,7 @@ void Program::DrawCurrentLives(void) {
 }
 void Program::DrawDebugVariables(void) {
     int baseSize = FontManager::PixelFontBody.GetBaseSize();
-
+    FontManager::PixelFontBody.DrawText(TextFormat("Alive: %d", Enemy::aliveEnemies),{10, 200}, baseSize, 0.1 , RED);
     FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown reset: %01i", this->respawnCooldownReset), {150, 400}, baseSize, 0.1, RED);
     FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown: %01i", this->respawnCooldown), {150, 500}, baseSize, 0.1, RED);
 }
@@ -323,7 +333,6 @@ void Program::KeyInputs() {
     if (startup && IsKeyPressed(KEY_ENTER)) {
         startup = false;
         if (!inGame) {
-            stageManager.SetMode(endless);
             pauseFrames = 480;
             PlaySound(SoundManager::theme);
             inGame = true; 
@@ -347,12 +356,13 @@ void Program::PlayerReset() {
     lives--;
 }
 
-void Program::Reset() {
+void Program::Reset(bool next_stage) {
     Enemy::enemies.clear();
+    Enemy::aliveEnemies = 0;
     StdEnemy::attackInProgress = false;
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
     scoreManager.resetScore(); // Reset score
-    stageManager.reset(); //Restarting the enemies to the start position
+    (endless&&next_stage)? stageManager.reset(true) : stageManager.reset(); //Restarting the enemies to the start position
     respawnCooldown = respawnCooldownReset;
     respawns = 0;
     count = 0;

@@ -14,10 +14,16 @@ class Loop{
     stages stageRN;
 
 
-
     public:
-    void SetMode(bool endless){this->isEndless = endless;}
+    int getNextStage(){return (int)stageRN+1;}
+    int getStage(){return (int)stageRN;}
     void StartingPositionEnemies();
+    void SecondStageEnemies();
+    void ThirdStageEnemies();
+    void FourthStageEnemies();
+    void FifthStageEnemies();
     void KillEmAll(void);
-    void reset();
+    void reset(bool next_stage);
+    void reset(){StartingPositionEnemies();}
+    
 };

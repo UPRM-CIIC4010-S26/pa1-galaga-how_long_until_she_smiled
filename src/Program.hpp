@@ -25,6 +25,7 @@ constexpr bool DEBUG_MODE = false;
 
 class Program {
     private:
+        enum class stages{DEFAULT, SECOND};
         Background background = Background();
         Player* player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
         Loop stageManager;
@@ -42,12 +43,16 @@ class Program {
         float bootTimer = 0.0f;
         int bootFrameCounter = 0;
 
+
+        bool stageTransition = false;
         bool startup = false;
         bool paused = false;
         bool gameOver = false;
         bool inGame = false;
         bool isBooting = true;
         bool endless = false;
+        bool stageCompleted = false;
+
 
         //BOOTUP VARIABLES
         struct Cell { // Creating structures for each cell for the 2D List each list
@@ -55,7 +60,7 @@ class Program {
             char letter;     
             Color color;    
         };
-        std::vector<std::vector<Cell>> bootGrid;/*There is no other way to do a CRT Effect without a 2D List having all the values of the letter
+        std::vector<std::vector<Cell>> bootGrid;/*There is no other way to do a "Garbage CRT RAM" effect without a 2D List having all the values of the letter
                                                 and having basically roating. And if there are, is too dificult to implement without changing a 
                                                 SIGNIFICANT part of the code base*/
 
@@ -74,7 +79,8 @@ class Program {
         void DrawGameOver();
         void KeyInputs();
         void PlayerReset();
-        void Reset();
+        void NextStage();
+        void Reset(bool next_stage=false);
 
         //BOOTUP FUNCTIONS
         void DrawBootup();

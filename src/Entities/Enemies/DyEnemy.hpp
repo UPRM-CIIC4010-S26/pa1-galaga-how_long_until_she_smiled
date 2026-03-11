@@ -6,6 +6,7 @@ class DyEnemy : public Enemy {
         float angle = 135;
         float aimAngle = 225;
         bool loop = false;
+        bool countedOffScreen = false;
 
     public:
         DyEnemy(float x, float y) : Enemy(x, y) { 

@@ -30,6 +30,7 @@ class Enemy {
         inline static float direction = 0.5;
         inline static int directionChange = 100;
         inline static std::vector<std::pair<std::pair<float, float>, Enemy*>> enemies;
+        inline static int aliveEnemies = 0; //This so that we dont have to go through the entire array every frame (just for stages and also i dont want O(n) everywhere)
 
         Enemy() {}
 
@@ -78,6 +79,7 @@ class Enemy {
                             lives = 5;
                         }
                         p.second = nullptr;
+                        aliveEnemies--;
                         PlaySound(SoundManager::dead);
                     }
                 }

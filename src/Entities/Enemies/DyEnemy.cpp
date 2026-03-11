@@ -42,6 +42,8 @@ void DyEnemy::update(std::pair<float, float> pos, HitBox target) {
         }
     }
 
+    
+
     this->position.first += 3 * cos(angle * M_PI / 180);
     this->position.second += 3 * sin(angle * M_PI / 180);
     this->hitBox.box.x = this->position.first;
@@ -51,6 +53,14 @@ void DyEnemy::update(std::pair<float, float> pos, HitBox target) {
         Projectile::projectiles.push_back(Projectile(Projectile(position.first + 15, position.second, 1)));
         PlaySound(SoundManager::shoot);
         this->cooldown = GetRandomValue(90, 300);
+    }
+
+    if (!this->countedOffScreen &&
+        (position.first < 0 || position.first > GetScreenWidth() + 50 ||
+         position.second < 0 || position.second > GetScreenHeight() + 50)) 
+    {
+        this->countedOffScreen = true;   // so we don't double-count
+        Enemy::aliveEnemies--;     // decrement global aliveEnemies
     }
 }
 
