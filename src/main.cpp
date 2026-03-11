@@ -2,6 +2,7 @@
 
 #include "resource_dir.h"
 #include "Program.hpp"
+#include "PostProcessing/OverlayTexture.hpp"
 
 int main ()
 {
@@ -10,6 +11,10 @@ int main ()
 	SetTargetFPS(60);
 
 	raylib::Window window(1000, 1000, "Galaga", FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+	
+	raylib::RenderTexture target(GetScreenWidth(), GetScreenHeight());
+	OverlayTexture crtEffect("shaders/crt.fs");
+	
 	Program Galaga;
 	FontManager::Load();
 	ImageManager::Load();
@@ -26,6 +31,7 @@ int main ()
 
 		Galaga.Update();
 		Galaga.Draw();
+		crtEffect.Draw(target);
 		Galaga.KeyInputs();
 
 		EndDrawing();
