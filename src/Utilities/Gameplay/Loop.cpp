@@ -41,7 +41,6 @@ void Loop::SecondStageEnemies(){
             float y = 100 + ((rows)*50);
 
         
-        
         if (rows==0 && ((i % 2 == 0 && i <= 4) || (i % 2 != 0 && i > 3))){
             Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
                 std::pair<float, float>{x, y}, 
@@ -66,17 +65,20 @@ void Loop::KillEmAll(void) {
 }
 
 void Loop::reset(bool next_stage){
-    if (next_stage){
-        this->stageRN=static_cast<stages>(static_cast<int>(stageRN) + 1);;
-    }
-    switch (stageRN){
-        case stages::DEFAULT:
-            StartingPositionEnemies();
-            break;
-        case stages::SECOND:
-            SecondStageEnemies();
-            break;
-    }
+    if (stagesActive){
+        if (next_stage) this->stageRN=static_cast<stages>(static_cast<int>(stageRN) + 1);    
+        switch (stageRN){
+            case stages::DEFAULT:
+                StartingPositionEnemies();
+                break;
+            case stages::SECOND:
+                SecondStageEnemies();
+                break;
+            }
+    }else StartingPositionEnemies();
+
+
+    
 }
 
 

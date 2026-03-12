@@ -1,4 +1,7 @@
 #include "Score.hpp"
+#include "Enemy.hpp"
+#include "Loop.hpp"
+
 
 // ----- Game loop functions -----
 // Drawing method for the score manager, to be called in main game loop
@@ -21,9 +24,10 @@ void ScoreManager::draw(raylib::Vector2 position, int asyncWave) {
     this->draw(position);
 
     int baseSize = FontManager::PixelFontBody.GetBaseSize();
+    int x = getRWave();
 
     raylib::Vector2 waveOffset = raylib::Vector2(GetScreenWidth() * 5/8, 0);
-    FontManager::PixelFontBody.DrawText((asyncWave != this->wave ? "Incoming Wave!" : ""), position + waveOffset + raylib::Vector2(0, 20), baseSize, 0.1f, RED);
+    FontManager::PixelFontBody.DrawText((asyncWave != this->getRWave() ? "Incoming Wave!" : ""), position + waveOffset + raylib::Vector2(0, 20), baseSize, 0.1f, RED);
 }
 
 // ----- Adding to score -----
@@ -31,7 +35,14 @@ void ScoreManager::addToScore(uint32_t increment) {
     int scoreUpdate = this->score + increment;
     if (scoreUpdate > this->maxScore) scoreUpdate = this->maxScore;
 
-    if (score >= toNextWave) this->nextWave();
+    if (score >= toNextWave){
+        if (Loop::stagesActive){
+            if (getRWave() < 3){
+                this->nextWave();
+            }else if (getRWave() == 3 && Enemy::aliveEnemies == 0) this->nextWave();
+        }else this->nextWave();
+    }
+    
     this->score = scoreUpdate;
 }
 uint32_t ScoreManager::addToScore(uint32_t increment, uint32_t amountToNextLife) {

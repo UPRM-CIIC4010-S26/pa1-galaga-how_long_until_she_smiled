@@ -19,6 +19,7 @@ class ScoreManager {
         // The single most important function in this class
         int getScore(void) { return this->score; }
         int getWave(void) { return this->wave; }
+        int getRWave() { return ((wave - 1) % 3) + 1; }
         int getWaveRate(void) { return this->waveRate; }
         int getToNextWave(void) { return this->toNextWave; }
 
@@ -32,7 +33,7 @@ class ScoreManager {
         void draw(raylib::Vector2 position);
         void draw(raylib::Vector2 position, int asyncWave);
 
-        ScoreManager(void) { this->score = 0; }
+        ScoreManager(void) {this->score = 0; }
         ScoreManager(int startingValue) { this->score = startingValue; }
 
         void setHighScore(void) { if (this->score > this->highScore) this->highScore = this->score; }

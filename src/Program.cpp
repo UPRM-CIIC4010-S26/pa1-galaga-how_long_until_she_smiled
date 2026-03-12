@@ -70,7 +70,7 @@ void Program::Update() {
         Projectile::ProjectileCollision();
 
 
-        if (endless && progWave >= 3 && Enemy::aliveEnemies == 0 && !stageTransition) {
+        if (stagesActive && progWave >= 3 && Enemy::aliveEnemies == 0 && !stageTransition) {
             stageTransition = true;
             progWave = 1;
             Reset(true);
@@ -158,21 +158,25 @@ void Program::ManageEnemyRespawns() {
     if (respawnCooldown <= 0) {
         if (progWave < scoreManager.getWave()) {
             for (int i = 0; i < scoreManager.getWave() - progWave; i++) {
-                if (endless && progWave < 3){
+                if (stagesActive && progWave < 3){
                 NewWave();
                 progWave++;
                 }
             }
         } else {
-            if (!endless || progWave < 3){
                 int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getWave() - 1));
                 respawnCooldownReset = DEFAULT_COOLDOWN * std::exp(-std::pow(offsetScore, 2) / 3000000);
                                                 /* Original equation: ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
                                                             / (std::exp(scoreDistance / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
                                                                                                                             + MIN_VALUE;*/
                 respawnCooldown = respawnCooldownReset;
-                RespawnEnemy();
-            }
+
+                if (stagesActive){
+                    if (progWave < 3){
+                        RespawnEnemy();
+                    }
+                }else RespawnEnemy();
+            
         }
     }
 
@@ -288,7 +292,7 @@ void Program::DrawStartup() {
     float t = GetTime();
     bool flash = ((int)(t * 2) % 2) == 0; 
     Color textColor = flash ? YELLOW : GRAY;
-    if (!endless){
+    if (!stagesActive){
         DrawText("Endless", (GetScreenWidth() / 2) - 75, (GetScreenHeight() / 2)+40, 24, textColor);
         DrawText("Stages", (GetScreenWidth() / 2) - 75, (GetScreenHeight() / 2)+80, 24, GRAY);
     }else{
@@ -328,11 +332,12 @@ void Program::KeyInputs() {
         Reset();
     }
 
-    if (startup && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN))) endless = !endless;
+    if (startup && (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN))) stagesActive = !stagesActive;
 
     if (startup && IsKeyPressed(KEY_ENTER)) {
         startup = false;
         if (!inGame) {
+            stageManager.setStages(stagesActive);
             pauseFrames = 480;
             PlaySound(SoundManager::theme);
             inGame = true; 
@@ -361,13 +366,14 @@ void Program::Reset(bool next_stage) {
     Enemy::aliveEnemies = 0;
     StdEnemy::attackInProgress = false;
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
-    scoreManager.resetScore(); // Reset score
-    (endless&&next_stage)? stageManager.reset(true) : stageManager.reset(); //Restarting the enemies to the start position
+    stageManager.reset(next_stage);
+    if (Loop::stagesActive&&next_stage){
+        scoreManager.resetScore();
+        lives = 3;}
     respawnCooldown = respawnCooldownReset;
     respawns = 0;
     count = 0;
     delay = 0;
-    lives = 3;
     pauseFrames = 480;
     PlaySound(SoundManager::theme );
     inGame = true;

@@ -50,7 +50,7 @@ class Program {
         bool gameOver = false;
         bool inGame = false;
         bool isBooting = true;
-        bool endless = false;
+        bool stagesActive = false;
         bool stageCompleted = false;
 
 

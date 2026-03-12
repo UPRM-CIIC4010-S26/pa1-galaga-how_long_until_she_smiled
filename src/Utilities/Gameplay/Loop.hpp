@@ -8,13 +8,13 @@
 using namespace std;
 
 class Loop{
-    private:
+    private:    
     enum class stages{DEFAULT, SECOND};
-    bool isEndless;
-    stages stageRN;
+    stages stageRN = stages::DEFAULT;
 
 
     public:
+    inline static int stagesActive;
     int getNextStage(){return (int)stageRN+1;}
     int getStage(){return (int)stageRN;}
     void StartingPositionEnemies();
@@ -24,6 +24,5 @@ class Loop{
     void FifthStageEnemies();
     void KillEmAll(void);
     void reset(bool next_stage);
-    void reset(){StartingPositionEnemies();}
-    
+    void setStages(bool def){this->stagesActive = def;}
 };
