@@ -12,8 +12,8 @@ int main ()
 
 	raylib::Window window(1000, 1000, "Galaga", FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	
-	raylib::RenderTexture2D target(GetScreenWidth(), GetScreenHeight());
 	OverlayTexture crtEffect("shaders/crt.fs");
+	raylib::RenderTexture2D target(GetScreenWidth(), GetScreenHeight());
 	
 	Program Galaga;
 	FontManager::Load();
@@ -34,7 +34,7 @@ int main ()
 		target.EndMode();
 
 		BeginDrawing();
-		//ClearBackground(WHITE);
+		ClearBackground(WHITE);
 		crtEffect.Draw(target);		
 		Galaga.KeyInputs();
 
