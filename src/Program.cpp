@@ -167,9 +167,14 @@ void Program::ManageEnemyRespawns() {
     if (respawnCooldown <= 0) {
         if (progWave < scoreManager.getWave()) {
             for (int i = 0; i < scoreManager.getWave() - progWave; i++) {
-                if (stagesActive && progWave < 3){
-                NewWave();
-                progWave++;
+                if (stagesActive){
+                    if (progWave < 3){
+                        NewWave();
+                        progWave++;
+                    }
+                }else{
+                    NewWave();
+                    progWave++;
                 }
             }
         } else {
