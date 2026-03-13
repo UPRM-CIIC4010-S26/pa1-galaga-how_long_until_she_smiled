@@ -13,7 +13,7 @@ class OverlayTexture {
             // Render generated texture using selected postprocessing shader
             this->curShader.BeginMode();
                 // NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
-                target.GetTexture().Draw(raylib::Rectangle( 0, 0, (float)target.texture.width, (float)-target.texture.height ), raylib::Vector2(0,0));
+                target.GetTexture().Draw(raylib::Rectangle( 0, 0, (float)target.texture.width, (float)-target.texture.height ), raylib::Vector2(0,0), WHITE);
             this->curShader.EndMode();
 
         }
@@ -27,6 +27,10 @@ class OverlayTexture {
             int iResolutionLoc = this->curShader.GetLocation("iResolution");
             float widthHeight[] = {GetScreenWidth(), GetScreenHeight()};
 
+            int kBgColorLoc = this->curShader.GetLocation("kBackgroundColor");
+            int backgroundColor[] = {0, 0, 0};
+
             this->curShader.SetValue(iResolutionLoc, &widthHeight, SHADER_UNIFORM_VEC2);
+            this->curShader.SetValue(kBgColorLoc, &backgroundColor, SHADER_UNIFORM_VEC3);
         }
 };

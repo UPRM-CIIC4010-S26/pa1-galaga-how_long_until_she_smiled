@@ -21,8 +21,9 @@
 
 #define RGBA(r, g, b, a)	vec4(float(r)/255.0, float(g)/255.0, float(b)/255.0, float(a)/255.0)
 
-const vec3 kBackgroundColor = RGBA(0x00, 0x60, 0xb8, 0xff).rgb; // medium-blue sky
+//const vec3 kBackgroundColor = RGBA(0x00, 0x60, 0xb8, 0xff).rgb; // medium-blue sky
 //const vec3 kBackgroundColor = RGBA(0xff, 0x00, 0xff, 0xff).rgb; // test magenta
+uniform vec3 kBackgroundColor = RGBA(0x00, 0x00, 0x00, 0x00).rgb; // medium-blue sky
 
 // H: Implicit/built-in value iChannel0 on Shadertoy needs to be defined here
 // Additionally, iResolution has to be passed through to the shader
@@ -193,7 +194,7 @@ vec3 mask(vec2 pos)
 	pos.x = fract(pos.x / 6.0);
 	if (pos.x < 0.333)
 		mask.r = kMaskLight;
-	else if (pos.x < 0.666)
+	else if (pos.x < 0.667)
 		mask.g = kMaskLight;
 	else
 		mask.b = kMaskLight;
@@ -216,22 +217,13 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     vec2 pos = warp(fragCoord.xy / iResolution.xy);
     vec4 unmodifiedColor = fetch(pos, vec2(0));
     
-	// Unmodified.
-	if (fragCoord.x < iResolution.x * 0.333)
-	{
-		fragColor.rgb = unmodifiedColor.rgb;
-	}
-	else
-	{
-		if (fragCoord.x < iResolution.x * 0.666) {
-			sHardScan = -12.0;
-			kMaskDark = kMaskLight = 1.0;
-		}
-		fragColor.rgb = tri(pos) * mask(fragCoord.xy);
-	}
+	sHardScan = -12.0;
+	kMaskDark = kMaskLight = 1.0;
+	fragColor.rgb = tri(pos) * mask(fragCoord.xy);
+
 	fragColor.rgb *=
 		bar(fragCoord.x, iResolution.x * 0.333) *
-		bar(fragCoord.x, iResolution.x * 0.666);
+		bar(fragCoord.x, iResolution.x * 0.667); // H: funny internet meme (applies to all instances of 0.666 -> 0.667)
 	fragColor = vec4(
         toSrgb(fragColor.rgb),
         1.0
