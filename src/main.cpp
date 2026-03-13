@@ -11,10 +11,7 @@ int main ()
 	SetTargetFPS(60);
 
 	raylib::Window window(1000, 1000, "Galaga", FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-	
-	OverlayTexture crtEffect("shaders/crt.fs", GetScreenWidth() * 1.2, GetScreenHeight() * 1.2);
-	raylib::RenderTexture2D target(GetScreenWidth(), GetScreenHeight());
-	
+
 	Program Galaga;
 	FontManager::Load();
 	ImageManager::Load();
@@ -25,13 +22,24 @@ int main ()
     return 1;
 }
 
+	raylib::RenderTexture2D target(GetRenderWidth(), GetRenderHeight());
+	OverlayTexture crtEffect("shaders/crt.fs", (float)GetRenderWidth(), (float)GetRenderHeight());
+	float scale = (float)GetRenderWidth() / (float)GetScreenWidth();
+
 	while (!WindowShouldClose()) {
+		printf("RenderTexture: %d x %d\n", target.texture.width, target.texture.height);
+		printf("Screen: %d x %d\n", GetScreenWidth(), GetScreenHeight());
 		Galaga.Update();
 
-		target.BeginMode();
-			ClearBackground(BLACK);
+	target.BeginMode();
+		ClearBackground(BLACK);
+	
+		rlPushMatrix();
+			rlScalef(scale, scale, 1.0f);
 			Galaga.Draw();
-		target.EndMode();
+		rlPopMatrix();
+		
+	target.EndMode();
 
 		BeginDrawing();
 		ClearBackground(WHITE);

@@ -31,7 +31,7 @@ uniform sampler2D texture;
 
 #define iChannel0 texture
 uniform vec2 iResolution;
-
+out vec4 FragColor;
 // Emulated input resolution.
 //#if 1
 	// Fix resolution to set amount.
@@ -97,7 +97,7 @@ vec4 fetch(vec2 pos, vec2 off)
 	if (max(abs(pos.x - 0.5), abs(pos.y - 0.5)) > 0.5) 
 		return vec4(vec3(0.0), 0.0);
    	
-    vec4 sampledColor = texture(iChannel0, pos.xy, -16.0);
+	vec4 sampledColor = textureLod(iChannel0, pos.xy, 0.0);
     
     sampledColor = vec4(
         (sampledColor.rgb * sampledColor.a) +
@@ -232,5 +232,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 
 // H: The good thing about importing from Shadertoy is that FragColor and FragCoord are already implicit values
 void main() {
-    mainImage(gl_FragColor, gl_FragCoord.xy);
+    mainImage(FragColor, gl_FragCoord.xy);
 }
