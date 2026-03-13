@@ -39,5 +39,5 @@ class ScoreManager {
         void setHighScore(void) { if (this->score > this->highScore) this->highScore = this->score; }
 
         void resetScore(void) { this->setHighScore(); this->score = 0; }
-        void resetScore(int startingValue) { this->setHighScore(); this->score = startingValue; }
+        void resetScore(int startingValue) { this->setHighScore(); this->score = startingValue; this->wave = 1; }
 };

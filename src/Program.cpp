@@ -34,8 +34,12 @@ void Program::Update() {
     }
     pauseFrames = std::max(pauseFrames - 1, 0);
 
+    if (pauseFrames <= 0) {
+        stageTransition = false;
+    }
+
     if (!startup && !paused && !gameOver && pauseFrames <= 0) {
-        
+
         Enemy::ManageEnemies(player->hitBox, scoreManager, lives);
         StdEnemy::attackReset();
         ManageEnemyRespawns();
@@ -102,6 +106,12 @@ void Program::Draw() {
     for (Projectile p : Projectile::projectiles) p.draw();
     for (std::pair<std::pair<float, float>, Enemy*>& p : Enemy::enemies) if (p.second) p.second->draw();
 
+
+    if (pauseFrames > 0 && stageTransition) {
+        if (Loop::stagesActive) DrawText(TextFormat("STAGE %01i", stageManager.getStage()+1), GetScreenWidth()/2 - 100, GetScreenHeight()/2, 30, RED);
+        else DrawText("STAGE NaN", GetScreenWidth()/2 - 100, GetScreenHeight()/2, 30, RED);
+    }
+
     // HUD
     scoreManager.draw({20, 20}, progWave);
     this->DrawCurrentLives();
@@ -123,7 +133,6 @@ void Program::NewWave(void) {
     for (int i = 0; i < 20; i++) {
         RespawnEnemy();
     }
-    stageTransition = false;
 }
 
 // Respawn enemy in position
@@ -338,7 +347,8 @@ void Program::KeyInputs() {
         startup = false;
         if (!inGame) {
             stageManager.setStages(stagesActive);
-            pauseFrames = 480;
+            pauseFrames = 480;            
+            stageTransition = true;
             PlaySound(SoundManager::theme);
             inGame = true; 
         }
@@ -366,14 +376,22 @@ void Program::Reset(bool next_stage) {
     Enemy::aliveEnemies = 0;
     StdEnemy::attackInProgress = false;
     player = new Player((GetScreenWidth() / 2) - 15, GetScreenHeight() * 0.75f);
-    stageManager.reset(next_stage);
-    if (Loop::stagesActive&&next_stage){
+    if (Loop::stagesActive){
+        if (!next_stage){
+            scoreManager.resetScore();
+            lives = 3;
+            stageManager.resetStage();
+        }
+    }
+    else{
         scoreManager.resetScore();
         lives = 3;}
+    stageManager.reset(next_stage);
     respawnCooldown = respawnCooldownReset;
     respawns = 0;
     count = 0;
     delay = 0;
+    stageTransition = true;
     pauseFrames = 480;
     PlaySound(SoundManager::theme );
     inGame = true;
