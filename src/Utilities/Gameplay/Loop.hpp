@@ -9,7 +9,7 @@ using namespace std;
 
 class Loop{
     private:    
-    enum class stages{DEFAULT, SECOND};
+    enum class stages{DEFAULT, SECOND, THIRD};
     stages stageRN = stages::DEFAULT;
 
 

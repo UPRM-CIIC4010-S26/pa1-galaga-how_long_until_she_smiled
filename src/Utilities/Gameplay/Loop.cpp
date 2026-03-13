@@ -30,7 +30,7 @@ void Loop::StartingPositionEnemies(){
 
 }};
 
-void Loop::SecondStageEnemies(){
+void Loop::ThirdStageEnemies(){
     int totalRows = 8;
     float spacing = 50;
     for (int rows = 0;rows<=7; rows++){
@@ -55,6 +55,47 @@ void Loop::SecondStageEnemies(){
     }}
 };
 
+
+void Loop::SecondStageEnemies(){
+    int spacing = 50;
+
+    float rowXStart = 500 - ((3 * spacing) / 2.0f);
+    for (int i = 0; i < 4; i++) {
+        float x = rowXStart + (i * spacing);
+        float y = 100;
+        Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
+            std::pair<float, float>{x, y}, 
+            new SpEnemy(x, y)
+        });
+        Enemy::aliveEnemies++;
+    }
+    float rowMidXStart = 500 - ((7 * spacing) / 2.0f);
+    for (int r = 1; r <= 3; r++) {
+        for (int i = 0; i < 8; i++) {
+            float x = rowMidXStart + (i * spacing);
+            float y = 100 + (spacing * r); // Offset by 1 row
+            Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
+                std::pair<float, float>{x, y}, 
+                new StdEnemy(x, y)
+            });
+            Enemy::aliveEnemies++;
+        }
+    }
+    float rowBotXStart = 500 - ((5 * spacing) / 2.0f);
+    for (int r = 4; r <= 5; r++) {
+        for (int i = 0; i < 6; i++) {
+            float x = rowBotXStart + (i * spacing);
+            float y = 100 + (spacing * r); // Offset by 3 rows total
+            Enemy::enemies.push_back(std::pair<std::pair<float, float>, Enemy*> {
+                std::pair<float, float>{x, y}, 
+                new StdEnemy(x, y)
+            });
+            Enemy::aliveEnemies++;
+        }
+    }
+
+}
+
 void Loop::KillEmAll(void) {
     // not sure if I should keep this method around, because whoever creates the 
     // enemies should destroy them
@@ -73,6 +114,10 @@ void Loop::reset(bool next_stage){
                 break;
             case stages::SECOND:
                 SecondStageEnemies();
+                break;
+            case stages::THIRD:
+                ThirdStageEnemies();
+                stageRN = stages::DEFAULT;
                 break;
             }
     }else StartingPositionEnemies();
