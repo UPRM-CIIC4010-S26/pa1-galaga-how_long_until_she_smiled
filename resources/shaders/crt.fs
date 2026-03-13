@@ -23,7 +23,7 @@
 
 //const vec3 kBackgroundColor = RGBA(0x00, 0x60, 0xb8, 0xff).rgb; // medium-blue sky
 //const vec3 kBackgroundColor = RGBA(0xff, 0x00, 0xff, 0xff).rgb; // test magenta
-uniform vec3 kBackgroundColor = RGBA(0x00, 0x00, 0x00, 0x00).rgb; // medium-blue sky
+const vec3 kBackgroundColor = RGBA(0x00, 0x00, 0x00, 0x00).rgb; // H: black
 
 // H: Implicit/built-in value iChannel0 on Shadertoy needs to be defined here
 // Additionally, iResolution has to be passed through to the shader
@@ -33,17 +33,17 @@ uniform sampler2D texture;
 uniform vec2 iResolution;
 
 // Emulated input resolution.
-#if 1
+//#if 1
 	// Fix resolution to set amount.
 	// Note: 256x224 is the most common resolution of the SNES, and that of Super Mario World.
-	vec2 res = vec2(
-		256.0 / 1.0,
-		224.0 / 1.0
-	);
-#else
+	//vec2 res = vec2(
+	//	256.0 / 1.0,
+	//	224.0 / 1.0
+	//); // H: Do NOT fix the resolution, we already have a resolution
+//#else
 	// Optimize for resize.
-	vec2 res = iResolution.xy / 6.0;
-#endif
+	vec2 res = iResolution.xy; // / 6.0; // H: This reduced resolution size which also made it look ugly
+//#endif
 
 // Hardness of scanline.
 //	-8.0 = soft
@@ -68,7 +68,7 @@ float kMaskLight = 1.5;
 //------------------------------------------------------------------------
 
 // sRGB to Linear.
-// Assuing using sRGB typed textures this should not be needed.
+// Assuing using sRGB typed textures this should not be needed
 float toLinear1(float c) {
 	return (c <= 0.04045) ?
 		(c / 12.92) :
@@ -221,9 +221,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
 	kMaskDark = kMaskLight = 1.0;
 	fragColor.rgb = tri(pos) * mask(fragCoord.xy);
 
-	fragColor.rgb *=
-		bar(fragCoord.x, iResolution.x * 0.333) *
-		bar(fragCoord.x, iResolution.x * 0.667); // H: funny internet meme (applies to all instances of 0.666 -> 0.667)
+	//fragColor.rgb *=
+	//	bar(fragCoord.x, iResolution.x * 0.333) *
+	//	bar(fragCoord.x, iResolution.x * 0.667); // H: funny internet meme (applies to all instances of 0.666 -> 0.667)
 	fragColor = vec4(
         toSrgb(fragColor.rgb),
         1.0
