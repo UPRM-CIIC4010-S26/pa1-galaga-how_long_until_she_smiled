@@ -12,7 +12,7 @@ int main ()
 
 	raylib::Window window(1000, 1000, "Galaga", FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	
-	OverlayTexture crtEffect("shaders/crt.fs");
+	OverlayTexture crtEffect("shaders/crt.fs", GetScreenWidth() * 1.2, GetScreenHeight() * 1.2);
 	raylib::RenderTexture2D target(GetScreenWidth(), GetScreenHeight());
 	
 	Program Galaga;

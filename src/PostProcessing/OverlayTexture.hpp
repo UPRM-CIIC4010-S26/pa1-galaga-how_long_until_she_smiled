@@ -18,14 +18,14 @@ class OverlayTexture {
 
         }
 
-        OverlayTexture(const char *shaderPath) {
+        OverlayTexture(const char *shaderPath, float resolutionWidth, float resolutionHeight) {
             if (std::filesystem::exists(shaderPath)) 
                 curShader = LoadShader(0, shaderPath);
             else 
                 throw 67;
 
             int iResolutionLoc = GetShaderLocation(this->curShader, "iResolution");
-            float widthHeight[] = {GetScreenWidth(), GetScreenHeight()};
+            float widthHeight[] = {resolutionWidth, resolutionHeight};
 
             int kBgColorLoc = GetShaderLocation(this->curShader, "kBackgroundColor");
             int backgroundColor[] = {0, 0, 0};
