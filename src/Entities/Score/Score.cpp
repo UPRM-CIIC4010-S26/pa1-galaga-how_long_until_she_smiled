@@ -20,16 +20,16 @@ void ScoreManager::draw(raylib::Vector2 position) {
 
     // BONUS: Draw current wave
     raylib::Vector2 waveOffset = raylib::Vector2(GetScreenWidth() * 3/4, 0);
-    FontManager::PixelFontBody.DrawText(TextFormat("Wave %02i", getRWave()), position + waveOffset, baseSize, 0.1f, RED);
+    FontManager::PixelFontBody.DrawText(TextFormat("Wave %02i", this->getWave()), position + waveOffset, baseSize, 0.1f, RED);
 }
 void ScoreManager::draw(raylib::Vector2 position, int asyncWave) {
     this->draw(position);
 
     int baseSize = FontManager::PixelFontBody.GetBaseSize();
-    int x = getRWave();
+    int x = this->getWave();
 
     raylib::Vector2 waveOffset = raylib::Vector2(GetScreenWidth() * 5/8, 0);
-    FontManager::PixelFontBody.DrawText((asyncWave != this->getRWave() ? "Incoming Wave!" : ""), position + waveOffset + raylib::Vector2(0, 20), baseSize, 0.1f, RED);
+    FontManager::PixelFontBody.DrawText((asyncWave != this->getWave() ? "Incoming Wave!" : ""), position + waveOffset + raylib::Vector2(0, 20), baseSize, 0.1f, RED);
 }
 
 // ----- Adding to score -----
@@ -39,10 +39,13 @@ void ScoreManager::addToScore(uint32_t increment) {
 
     if (score >= toNextWave){
         if (Loop::stagesActive){
-            if (getRWave() < 3){
+
+            if (this->getWave() < 3){
                 this->nextWave();
-            }else if (getRWave() == 3 && Enemy::aliveEnemies == 1) this->nextWave();
-        }else this->nextWave();
+            } //else if (getRWave() == 3 && Enemy::aliveEnemies == 1) this->nextWave();
+            else this->toNextWave += this->waveRate;
+
+        } else this->nextWave();
     }
     
     this->score = scoreUpdate;

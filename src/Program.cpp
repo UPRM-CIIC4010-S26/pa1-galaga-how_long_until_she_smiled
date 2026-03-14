@@ -181,7 +181,7 @@ void Program::ManageEnemyRespawns() {
                 }
             }
         } else {
-                int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getRWave() - 1));
+                int offsetScore = scoreManager.getScore() % scoreManager.getWaveRate();
                 respawnCooldownReset = DEFAULT_COOLDOWN * std::exp(-std::pow(offsetScore, 2) / 3000000);
                                                 /* Original equation: ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
                                                             / (std::exp(scoreDistance / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
@@ -389,7 +389,8 @@ void Program::Reset(bool next_stage) {
             scoreManager.resetScore();
             lives = 3;
             stageManager.resetStage();
-        }
+        } else 
+            scoreManager.resetWave();
     }
     else{
         scoreManager.resetScore();

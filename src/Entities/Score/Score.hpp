@@ -31,6 +31,7 @@ class ScoreManager {
         uint32_t addToScore(uint32_t increment, uint32_t amountToNextLife);
 
         void nextWave(void);
+        void resetWave(void) {this->wave = 1; this->toNextWave = toNextWaveStart;}
 
         void draw(raylib::Vector2 position);
         void draw(raylib::Vector2 position, int asyncWave);
