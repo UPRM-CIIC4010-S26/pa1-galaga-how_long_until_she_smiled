@@ -76,6 +76,9 @@ void Program::Update() {
 
         if (stagesActive && progWave >= 3 && Enemy::aliveEnemies == 0 && !stageTransition) {
             stageTransition = true;
+            scoreManager.addToScore(0);
+            this->respawnCooldownReset = DEFAULT_COOLDOWN;
+            this->respawnCooldown = this->respawnCooldownReset;
             progWave = 1;
             Reset(true);
         }
@@ -165,8 +168,8 @@ void Program::ManageEnemyRespawns() {
 
     respawnCooldown -= 1;
     if (respawnCooldown <= 0) {
-        if (progWave < scoreManager.getWave()) {
-            for (int i = 0; i < scoreManager.getWave() - progWave; i++) {
+        if (progWave < scoreManager.getRWave()) {
+            for (int i = 0; i < scoreManager.getRWave() - progWave; i++) {
                 if (stagesActive){
                     if (progWave < 3){
                         NewWave();
@@ -178,7 +181,7 @@ void Program::ManageEnemyRespawns() {
                 }
             }
         } else {
-                int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getWave() - 1));
+                int offsetScore = scoreManager.getScore() - (scoreManager.getWaveRate() * (scoreManager.getRWave() - 1));
                 respawnCooldownReset = DEFAULT_COOLDOWN * std::exp(-std::pow(offsetScore, 2) / 3000000);
                                                 /* Original equation: ((DEFAULT_COOLDOWN - MIN_VALUE) * RATIONAL_OFFSET)   \
                                                             / (std::exp(scoreDistance / EXPONENTIAL_OFFSET) + RATIONAL_OFFSET) \
@@ -392,7 +395,8 @@ void Program::Reset(bool next_stage) {
         scoreManager.resetScore();
         lives = 3;}
     stageManager.reset(next_stage);
-    respawnCooldown = respawnCooldownReset;
+    this->respawnCooldownReset = DEFAULT_COOLDOWN;
+    this->respawnCooldown = this->respawnCooldownReset;
     respawns = 0;
     count = 0;
     delay = 0;

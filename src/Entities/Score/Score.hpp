@@ -21,7 +21,7 @@ class ScoreManager {
         // The single most important function in this class
         int getScore(void) { return this->score; }
         int getWave(void) { return this->wave; }
-        int getRWave() { return ((wave - 1) % 3) + 1; }
+        int getRWave();
         int getWaveRate(void) { return this->waveRate; }
         int getToNextWave(void) { return this->toNextWave; }
 

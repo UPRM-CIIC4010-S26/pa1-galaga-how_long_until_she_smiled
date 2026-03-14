@@ -3,6 +3,8 @@
 #include "Loop.hpp"
 
 
+int ScoreManager::getRWave() { return Loop::stagesActive ? ((this->wave - 1) % 3) + 1 : this->wave;}
+
 // ----- Game loop functions -----
 // Drawing method for the score manager, to be called in main game loop
 void ScoreManager::draw(raylib::Vector2 position) {
@@ -18,7 +20,7 @@ void ScoreManager::draw(raylib::Vector2 position) {
 
     // BONUS: Draw current wave
     raylib::Vector2 waveOffset = raylib::Vector2(GetScreenWidth() * 3/4, 0);
-    FontManager::PixelFontBody.DrawText(TextFormat("Wave %02i", this->wave), position + waveOffset, baseSize, 0.1f, RED);
+    FontManager::PixelFontBody.DrawText(TextFormat("Wave %02i", getRWave()), position + waveOffset, baseSize, 0.1f, RED);
 }
 void ScoreManager::draw(raylib::Vector2 position, int asyncWave) {
     this->draw(position);
@@ -39,7 +41,7 @@ void ScoreManager::addToScore(uint32_t increment) {
         if (Loop::stagesActive){
             if (getRWave() < 3){
                 this->nextWave();
-            }else if (getRWave() == 3 && Enemy::aliveEnemies == 0) this->nextWave();
+            }else if (getRWave() == 3 && Enemy::aliveEnemies == 1) this->nextWave();
         }else this->nextWave();
     }
     
