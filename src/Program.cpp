@@ -223,6 +223,8 @@ void Program::DrawDebugVariables(void) {
     FontManager::PixelFontBody.DrawText(TextFormat("Alive: %d", Enemy::aliveEnemies),{10, 200}, baseSize, 0.1 , RED);
     FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown reset: %01i", this->respawnCooldownReset), {150, 400}, baseSize, 0.1, RED);
     FontManager::PixelFontBody.DrawText(TextFormat("Respawn cooldown: %01i", this->respawnCooldown), {150, 500}, baseSize, 0.1, RED);
+    FontManager::PixelFontBody.DrawText(TextFormat("To Next Wave: %01i", this->scoreManager.getToNextWave()), {150, 600}, baseSize, 0.1, RED);
+    FontManager::PixelFontBody.DrawText(TextFormat("Wave Rate: %01i", this->scoreManager.getWaveRate()), {150, 700}, baseSize, 0.1, RED);
 }
 
 void Program::InitializeGrid() {
@@ -390,7 +392,7 @@ void Program::Reset(bool next_stage) {
             lives = 3;
             stageManager.resetStage();
         } else 
-            scoreManager.resetWave();
+            scoreManager.softResetWave();
     }
     else{
         scoreManager.resetScore();

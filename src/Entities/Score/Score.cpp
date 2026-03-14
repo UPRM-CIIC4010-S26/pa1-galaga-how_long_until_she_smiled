@@ -42,7 +42,7 @@ void ScoreManager::addToScore(uint32_t increment) {
 
             if (this->getWave() < 3){
                 this->nextWave();
-            } //else if (getRWave() == 3 && Enemy::aliveEnemies == 1) this->nextWave();
+            } else if (this->getWave() == 3 && Enemy::aliveEnemies == 1) this->nextWave();
             else this->toNextWave += this->waveRate;
 
         } else this->nextWave();

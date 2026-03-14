@@ -32,6 +32,7 @@ class ScoreManager {
 
         void nextWave(void);
         void resetWave(void) {this->wave = 1; this->toNextWave = toNextWaveStart;}
+        void softResetWave(void) { this->wave = 1; }
 
         void draw(raylib::Vector2 position);
         void draw(raylib::Vector2 position, int asyncWave);
@@ -41,16 +42,10 @@ class ScoreManager {
 
         void setHighScore(void) { if (this->score > this->highScore) this->highScore = this->score; }
 
-        void resetScore(void) { 
-            this->setHighScore(); 
-            this->score = 0; 
-            this->wave = 1;
-            this->toNextWave = toNextWaveStart;
-        }
-        void resetScore(int startingValue) { 
+        void resetScore(bool softReset = false, int startingValue = 0) { 
             this->setHighScore(); 
             this->score = startingValue; 
-            this->wave = 1; 
-            this->toNextWave = toNextWaveStart; 
+            if (softReset) this->softResetWave();
+            else this->resetWave();
         }
 };
