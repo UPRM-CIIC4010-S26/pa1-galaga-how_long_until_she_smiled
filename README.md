@@ -22,3 +22,17 @@ If a partner has no commits in the repositories, they will receive a 0.
 
 ## Student Notes
 If you have any bonus specs, bonus or any details the TA's should know, you should include it here:
+
+Welcome to Galaga remade!
+    -We got a MAME source code to C++ code, and as such we add some features to it. (This is story of how we got this source code)
+
+Features:
+    -STAGES! Two stages has been added to source code, one emulating the classic formation from Galaga 87 and a triangle (dont ask why), this repeats after stage 1, in a loop.
+    -CRT FEEL! Shaders has been added when running to feel that classic arcade style (this a lot of time and was very painful)
+    -RAM CLEAR! As old arcade had to clear RAM, this also goes through that process (even tho it doesnt need it)
+    -WAVES! This version of Galaga adds waves as new mechanic, using mathematical formulas for score managament.
+    -SOUND! This version has sound, including the old theme song at the start of stages.
+
+Thats all we could add, so we hope that you enjoy our version of Galaga, since it took a lot of work!!!
+
+    
