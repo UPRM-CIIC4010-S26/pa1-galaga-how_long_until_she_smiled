@@ -12,8 +12,10 @@ class ScoreManager {
 
         uint32_t highScore = 0;
 
+        static const uint32_t toNextWaveStart = 1500;
+
         uint32_t waveRate = 2000;
-        uint32_t toNextWave = 1500;
+        uint32_t toNextWave = toNextWaveStart;
         uint32_t wave = 1;
     public:
         // The single most important function in this class
@@ -38,6 +40,16 @@ class ScoreManager {
 
         void setHighScore(void) { if (this->score > this->highScore) this->highScore = this->score; }
 
-        void resetScore(void) { this->setHighScore(); this->score = 0; }
-        void resetScore(int startingValue) { this->setHighScore(); this->score = startingValue; this->wave = 1; }
+        void resetScore(void) { 
+            this->setHighScore(); 
+            this->score = 0; 
+            this->wave = 1;
+            this->toNextWave = toNextWaveStart;
+        }
+        void resetScore(int startingValue) { 
+            this->setHighScore(); 
+            this->score = startingValue; 
+            this->wave = 1; 
+            this->toNextWave = toNextWaveStart; 
+        }
 };
